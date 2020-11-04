@@ -22,7 +22,7 @@
     <meta name="description" content="">
     <meta property="og:type" content="website">
 <meta property="og:title" content="Hexo">
-<meta property="og:url" content="https://github.com/Dsi13nc3/categories/others/index.html">
+<meta property="og:url" content="https://github.com/Dsi13nc3/archives/2020/09/index.html">
 <meta property="og:site_name" content="Hexo">
 <meta property="og:locale">
 <meta property="article:author" content="Dsil3nc3">
@@ -354,25 +354,37 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2020/03/03/phpstorm-xdebug/" >
+        <a class="abstract-title" href = "/2020/09/05/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >
             
-                <span>phpstorm+xdebug断点调试环境(转载)</span>
+                <span>frp内网穿透</span>
         </a>
         <div class="abstract-content">
-            phpStorm+xdebug断点调试环境配置最简实践照着这个就可以，我本地是9001端口被占用，改成9009端口就可以。
-这两天需要用到php7.0+发现有点问题，这里参照这个方法phpstorm 调试 laravel然后参照上面的方式配置一下xdebug就可以，蛮简单的
+            https://zhuanlan.zhihu.com/p/45445979
+服务器端和客户端机（内网）的版本要一致
+内网ssh连接服务器端需要配置Frps和Frps.ini
+配置Frps.ini
+12[common]bind_port = 7000
 
+服务器端启动Frp后监听的端口是7000端口
+启动指令
+1.&#x2F;frps -c frps.ini
+
+
+
+客户新建机（内网机器）配置Frpc和Frpc.ini
+Frpc.ini的初始配置是
+123456789101112[common]server_addr = 127.0.0.1server_port = 7000[ssh]type...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/03/03</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/09/05</span>
             </div>
             <!-- tags  -->
             
             <div class= abstract-tags >
     
-        <a class="post-tag" href="javascript:void(0);" data-tags = "others">others</a>
+        <a class="post-tag" href="javascript:void(0);" data-tags = "network">network</a>
     
 </div>
             
