@@ -355,6 +355,49 @@
     
     
     <article class="index-post">
+        <a class="abstract-title" href = "/2020/09/05/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >
+            
+                <span>frp内网穿透</span>
+        </a>
+        <div class="abstract-content">
+            https://zhuanlan.zhihu.com/p/45445979
+服务器端和客户端机（内网）的版本要一致
+内网ssh连接服务器端需要配置Frps和Frps.ini
+配置Frps.ini
+12[common]bind_port = 7000
+
+服务器端启动Frp后监听的端口是7000端口
+启动指令
+1.&#x2F;frps -c frps.ini
+
+
+
+客户端机（内网机器）配置Frpc和Frpc.ini
+Frpc.ini的初始配置是
+123456789101112[common]server_addr = 127.0.0.1server_port = 7000[ssh]type ...
+        </div>
+        <div class="abstract-post-meta">
+            <!-- date  -->
+            <div class="abstract-date">
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/09/05</span>
+            </div>
+            <!-- tags  -->
+            
+            <div class= abstract-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "network">network</a>
+    
+</div>
+            
+        </div>
+    </article>
+    
+    
+    
+    
+    
+    
+    <article class="index-post">
         <a class="abstract-title" href = "/2020/03/03/phpstorm-xdebug/" >
             
                 <span>phpstorm+xdebug断点调试环境(转载)</span>
@@ -583,9 +626,22 @@
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <div class="total-and-search">
         <div class="total-archive">
-        Total : 11
+        Total : 12
         </div>
         <!-- search  -->
         
@@ -602,6 +658,20 @@
     
         <li class="archive-post-item">
             <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" >记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2022/02/26/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-%E5%8F%8D%E5%B0%84%E7%AF%87/" >java反序列化-反射篇</a>
         </li>
     
     
@@ -717,6 +787,8 @@ jsonContent:
     <div class="sidebar-categories-name">
     
         <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
+    
+        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
     
         <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
     

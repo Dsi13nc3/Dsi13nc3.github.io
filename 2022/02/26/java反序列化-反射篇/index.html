@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="ch">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="M0deration">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="M0deration">
+    
+    <meta name="keywords" content="hexo,ctf,web安全">
+    
+    <meta name="description" content="">
+    <meta name="description" content="读p牛的java安全漫谈笔记 01 反射篇p牛对于动态特性的解释  ⼀段代码，改变其中的变量，将会导致 这段代码产⽣功能性的变化，我称之为动态特性  比如php中的一句话 1&lt;?php eval($_POST[1]); ?&gt;  就可以通过post传入1执行其他的功能，在没传入值之前你也不知道他要干啥 下面看一下java的 1234public void execute(String c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java反序列化-反射篇">
+<meta property="og:url" content="https://github.com/Dsi13nc3/2022/02/26/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-%E5%8F%8D%E5%B0%84%E7%AF%87/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="读p牛的java安全漫谈笔记 01 反射篇p牛对于动态特性的解释  ⼀段代码，改变其中的变量，将会导致 这段代码产⽣功能性的变化，我称之为动态特性  比如php中的一句话 1&lt;?php eval($_POST[1]); ?&gt;  就可以通过post传入1执行其他的功能，在没传入值之前你也不知道他要干啥 下面看一下java的 1234public void execute(String c">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-02-26T13:03:31.000Z">
+<meta property="article:modified_time" content="2022-02-26T13:05:51.424Z">
+<meta property="article:author" content="M0deration">
+<meta property="article:tag" content="ctf web安全 ess3nce">
+<meta name="twitter:card" content="summary">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>java反序列化-反射篇 · M0deration&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/Ess3nce.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >M0deration&#39;s blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">java反序列化-反射篇</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>M0deration's blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            java反序列化-反射篇
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3k</span>阅读时长: <span class="post-count reading-time">12 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2022/02/26</span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <p>读p牛的java安全漫谈笔记</p>
+<h1 id="01-反射篇"><a href="#01-反射篇" class="headerlink" title="01 反射篇"></a>01 反射篇</h1><p>p牛对于动态特性的解释</p>
+<blockquote>
+<p>⼀段代码，改变其中的变量，将会导致 这段代码产⽣功能性的变化，我称之为动态特性</p>
+</blockquote>
+<p>比如php中的一句话</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_POST[<span class="number">1</span>]); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>就可以通过post传入1执行其他的功能，在没传入值之前你也不知道他要干啥</p>
+<p>下面看一下java的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(String className, String methodName)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"> Class clazz = Class.forName(className);</span><br><span class="line"> clazz.getMethod(methodName).invoke(clazz.newInstance());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>获取类  的⽅法： forName </p>
+<p>实例化类对象的⽅法（调用该类的无参构造函数）： newInstance </p>
+<p>获取  函数的⽅法： getMethod </p>
+<p><strong>getMethod 的作用是通过反射获取一个类的某个特定的公有方法</strong>  </p>
+<p>执⾏函数的⽅法： invoke</p>
+</blockquote>
+<p>这里感觉有点像python的获取基类的那种感觉，在另一篇先知社区的文章里，把forName的方法叫做获取类对象</p>
+<p>有三种获取类对象的方法</p>
+<ul>
+<li>class.forName(“”)</li>
+</ul>
+<ul>
+<li><p>obj.class</p>
+<blockquote>
+<p>如果你已经加载了某个类，只是想获取到它的 java.lang.Class 对象，那么就直接 拿它的 class 属性即可。这个⽅法其实不属于反射</p>
+</blockquote>
+</li>
+<li><p>obj.getClass()</p>
+<p>有某个类实例后对象，可以通过这种方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Integer i=<span class="number">1</span>;</span><br><span class="line">Class runtimeClass=i.getClass();</span><br><span class="line">System.out.println(runtimeClass);</span><br><span class="line"><span class="comment">//class java.lang.Integer</span></span><br></pre></td></tr></table></figure>
+
+<p>然后再通过forName方法就可以获取执行命令的<code>java.lang.Runtime</code>类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Integer i=<span class="number">1</span>;</span><br><span class="line">Class runtimeClass=i.getClass().forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">System.out.println(runtimeClass);</span><br><span class="line"></span><br><span class="line"><span class="comment">//class java.lang.Runtime</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+</li>
+</ul>
+<h2 id="forName-“”"><a href="#forName-“”" class="headerlink" title="forName(“”)"></a>forName(“”)</h2><p>forName有两个函数重载：</p>
+<ul>
+<li>Class forName(String name)</li>
+<li>Class forName(String name, <strong>boolean</strong> initialize, ClassLoader loader)</li>
+</ul>
+<p><code>ClassLoader</code>它就是⼀个“加载器”，告诉Java虚拟机如何加载这个类。关于这个点，后⾯还 有很多有趣的漏洞利⽤⽅法，这⾥先不展开说了。Java默认的 <code>ClassLoader</code> 就是根据类名来加载类， 这个类名是类完整路径，如 <code>java.lang.Runtime </code>。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrainPrint</span> </span>&#123;</span><br><span class="line"> &#123;</span><br><span class="line"> 	System.out.printf(<span class="string">&quot;Empty block initial %s\n&quot;</span>, <span class="keyword">this</span>.getClass());</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">static</span> &#123;</span><br><span class="line"> 	System.out.printf(<span class="string">&quot;Static initial %s\n&quot;</span>, TrainPrint.class);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">TrainPrint</span><span class="params">()</span> </span>&#123;</span><br><span class="line"> 	System.out.printf(<span class="string">&quot;Initial %s\n&quot;</span>, <span class="keyword">this</span>.getClass());</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>⾸先调⽤的是 static {} ，其次是 {} ，最后是构造函数。<br>其中， static {} 就是在“类初始化”的时候调⽤的，⽽ {} 中的代码会放在构造函数的 super() 后⾯，<br>但在当前构造函数内容的前⾯。<br>所以说， <code>forName</code> 中的 <code>initialize=true</code> 其实就是告诉Java虚拟机是否执⾏”类初始化“。<br>那么，假设我们有如下函数，其中函数的参数name可控：<br>我们就可以编写⼀个恶意类，将恶意代码放置在 static {} 中，从⽽执⾏</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Person p &#x3D; new Person(&quot;zhangsan&quot;,20);</span><br><span class="line">该句话都做了什么事情？</span><br><span class="line">1，因为new用到了Person.class.所以会先找到Person.class文件并加载到内存中。</span><br><span class="line">2，执行该类中的static代码块，如果有的话，给Person.class类进行初始化。</span><br><span class="line">3，在堆内存中开辟空间，分配内存地址。</span><br><span class="line">4，在堆内存中建立对象的特有属性。并进行默认初始化。</span><br><span class="line">5，对属性进行显示初始化。</span><br><span class="line">6，对对象进行构造代码块初始化。</span><br><span class="line">7，对对象进行对应的构造函数初始化。</span><br><span class="line">8，将内存地址付给栈内存中的p变量。</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> M0deration</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/12/31 9:05</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ClassNotFoundException </span>&#123;</span><br><span class="line">        Class.forName(<span class="string">&quot;eval&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//恶意类</span></span><br><span class="line"><span class="keyword">import</span> java.io.BufferedReader;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStreamReader;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Author</span> M0deration</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Date</span> 2021/12/31 9:06</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">eval</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Runtime rt = Runtime.getRuntime();</span><br><span class="line">            String[] commands = &#123;<span class="string">&quot;ipconfig&quot;</span>, <span class="string">&quot;/all&quot;</span>&#125;;</span><br><span class="line">            Process pc = rt.exec(commands);</span><br><span class="line">            InputStream fis=pc.getInputStream();</span><br><span class="line">            <span class="comment">//用一个读输出流类去读</span></span><br><span class="line">            InputStreamReader isr=<span class="keyword">new</span> InputStreamReader(fis, <span class="string">&quot;gbk&quot;</span>);</span><br><span class="line">            <span class="comment">//用缓冲器读行</span></span><br><span class="line">            BufferedReader br=<span class="keyword">new</span> BufferedReader(isr);</span><br><span class="line">            String line=<span class="keyword">null</span>;</span><br><span class="line">            <span class="comment">//直到读完为止</span></span><br><span class="line">            <span class="keyword">while</span>((line=br.readLine())!=<span class="keyword">null</span>)</span><br><span class="line">            &#123;</span><br><span class="line">                System.out.println(line);</span><br><span class="line">            &#125;</span><br><span class="line">            pc.waitFor();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;	</span><br><span class="line">            System.out.println(e);</span><br><span class="line">            <span class="comment">// do nothing</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="02-反射篇-2"><a href="#02-反射篇-2" class="headerlink" title="02.反射篇(2)"></a>02.反射篇(2)</h1><p>在看这篇之前先学习一下链式编程，如果了解直接跳过，不了解看一下方便后面理解</p>
+<h2 id="java链式编程"><a href="#java链式编程" class="headerlink" title="java链式编程"></a><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a8c51f220189">java链式编程</a></h2><p>参考:<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a8c51f220189">https://www.jianshu.com/p/a8c51f220189</a></p>
+<p>链式编程比较简单，只要<code>return this</code>即可具有相应的编程模式</p>
+<p>只介绍简单的链式编程</p>
+<h3 id="简单链式编程"><a href="#简单链式编程" class="headerlink" title="简单链式编程"></a>简单链式编程</h3><p>使用<code>return this</code>可以实现链式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String bookId;</span><br><span class="line">    <span class="keyword">private</span> String title;</span><br><span class="line">    <span class="keyword">private</span> String cover;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getBookId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> bookId;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Book <span class="title">setBookId</span><span class="params">(String bookId)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.bookId = bookId;</span><br><span class="line">        <span class="comment">// 返回当前对象</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getTitle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> title;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Book <span class="title">setTitle</span><span class="params">(String title)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.title = title;</span><br><span class="line">        <span class="comment">// 返回当前对象</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getCover</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> cover;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Book <span class="title">setCover</span><span class="params">(String cover)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cover = cover;</span><br><span class="line">        <span class="comment">// 返回当前对象</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Book&#123;&quot;</span> +</span><br><span class="line">                <span class="string">&quot;bookId=&#x27;&quot;</span> + bookId + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, title=&#x27;&quot;</span> + title + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&quot;, cover=&#x27;&quot;</span> + cover + <span class="string">&#x27;\&#x27;&#x27;</span> +</span><br><span class="line">                <span class="string">&#x27;&#125;&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Book book = <span class="keyword">new</span> Book().setBookId(<span class="string">&quot;b.001&quot;</span>).setTitle(<span class="string">&quot;庆余年&quot;</span>).setCover(<span class="string">&quot;http://localhost/qyn.jpg&quot;</span>);</span><br><span class="line">        System.out.println(book);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Book&#123;bookId=&#x27;b.001&#x27;, title=&#x27;庆余年&#x27;, cover=&#x27;http://localhost/qyn.jpg&#x27;&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>反射1提到可以通过<code>forName</code>来获取类，获得类以后，我们可以继续使用反射来获取这个类中的属性、方法，也可以实例化这个类，并调用方法</p>
+<p><code>class.newInstance()</code>可以调用类的无参构造函数，但是很多时候这样调用并不能成功，可能的原因</p>
+<ol>
+<li>你使用的类没有无参构造函数  </li>
+<li>使用的类，它的构造函数是私有的</li>
+</ol>
+<p>最后<code>payload</code>用的比较多的就是<code>java.lang.Runtime  </code></p>
+<p>但是不能通过<code>newInstance</code>利用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Class.forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">clazz.getMethod(<span class="string">&quot;exec&quot;</span>, String.class).invoke(clazz.newInstance(), <span class="string">&quot;id&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>原因是 Runtime 类的构造方法是私有的</strong>，构造函数私有主要是单例模式会使用</p>
+<p>例如jdbc连接数据库只希望初始化建立一次，就可以将数据库连接使用的类的构造函数设置为私有，然后编写一个静态方法来获取    </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TrainDB</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> TrainDB instance = <span class="keyword">new</span> TrainDB();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> TrainDB <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">TrainDB</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 建立连接的代码...</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，只有类初始化的时候会执行一次构造函数，后面只能通过 getInstance 获取这个对象，避免建立多个数据库连接  </p>
+<p>Runtime类也是单例模式，所以无法通过<code>getInstance </code>获取对象，只能通过 <code>Runtime.getRuntime()</code> 来获取到 <code>Runtime</code> 对象  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Class.forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">clazz.getMethod(<span class="string">&quot;exec&quot;</span>,String.class).invoke(clazz.getMethod(<span class="string">&quot;getRuntime&quot;</span>).invoke(clazz),<span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="getMethod"><a href="#getMethod" class="headerlink" title="getMethod"></a>getMethod</h3><p><code>getMethod  </code>是通过反射获取一个类的公有方法，但是java通过重载可以出现几个相同函数名但是不同参数的函数，无法通过函数名确定函数，所以调用 getMethod 的时候，需要传给他你需要获取的函数的参数类型列表  </p>
+<h3 id="invoke"><a href="#invoke" class="headerlink" title="invoke"></a>invoke</h3><p><code>invoke</code>作用是执行方法，它的第一个参数是：<br><strong>如果这个方法是一个普通方法，那么第一个参数是类对象<br>如果这个方法是一个静态方法，那么第一个参数是类</strong></p>
+<p>正常执行方法是 <code>[1].method([2], [3], [4]...)</code> ，其实在反射里就是<br><code>method.invoke([1], [2], [3], [4]...)</code></p>
+<p><code>[类].静态方法(参数)</code>===》<code>静态方法.([类],参数)</code></p>
+<p><code>[对象].普通方法(参数)</code>===》<code>普通方法.([对象],参数)</code></p>
+<p><strong>因为需要使用的<code>exec</code>方法是普通方法，需要得到<code>Runtime</code>对象，但是<code>Runtime</code>构造函数私有(通过类内的构造函数得到类对象),所以通过静态方法<code>getRuntime</code>来获取类对象</strong></p>
+<p>上面简写的payload可以拆分为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        Class clazz = Class.forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">        Method execMethod =clazz.getMethod(<span class="string">&quot;exec&quot;</span>, String.class);</span><br><span class="line"><span class="comment">//    java.lang.Runtime无参构造函数私有，通过静态函数getRuntime获取类对象</span></span><br><span class="line">        Method getRuntimeMethod = clazz.getMethod(<span class="string">&quot;getRuntime&quot;</span>);</span><br><span class="line"><span class="comment">//        获取类对象，类实例化是对象</span></span><br><span class="line">        Object runtime = getRuntimeMethod.invoke(clazz);</span><br><span class="line">        execMethod.invoke(runtime,<span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h1 id="03-反射篇-3"><a href="#03-反射篇-3" class="headerlink" title="03.反射篇(3)"></a>03.反射篇(3)</h1><p>反射2解决的是类里面构造函数私有，利用该类中单例模式静态方法实现方法的调用</p>
+<p>这篇解决这两个问题</p>
+<ul>
+<li>如果一个类没有无参构造方法，也没有类似单例模式里的静态方法，我们怎样通过反射实例化该类呢？</li>
+<li>如果一个方法或构造方法是私有方法，我们是否能执行它呢？  </li>
+</ul>
+<h2 id="问题一"><a href="#问题一" class="headerlink" title="问题一"></a>问题一</h2><p>想要解决第一个问题需要用到一个新的反射方法<code>getConstructor</code>  </p>
+<p>和反射2用的<code>Runtime</code>类不同的是</p>
+<p><code>Runtime</code>类有私有无参构造函，找到静态函数<code>getRuntime</code>获取类对象</p>
+<p><code>getConstructor</code>接收的参数是<strong>构造函数列表类型</strong>,因为构造函数也支持重载，所以必须用参数列表类型才能唯一确定一个构造函数  </p>
+<p>获取构造函数后使用<code>newInstance</code>执行</p>
+<p>另一种常用的执行命令的方式<code>ProcessBuilder</code>使用反射来获取其构造函数，然后调用<code>start()</code> 来执行命令  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Class.forName(<span class="string">&quot;java.lang.ProcessBuilder&quot;</span>);</span><br><span class="line"> </span><br><span class="line">((ProcessBuilder)clazz.getConstructor(List.class).newInstance(Arrays.asList(<span class="string">&quot;calc.exe&quot;</span>))).start();</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<p><code>ProcessBuilder</code>有两个构造函数</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ProcessBuilder</span><span class="params">(List&lt;String&gt; command)</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ProcessBuilder</span><span class="params">(String... command)</span></span></span><br></pre></td></tr></table></figure>
+
+<p>上面payload用到的是第一个形式的构造函数，所以在<code>getConstructor()</code>时候传入<code>list.class</code></p>
+<p>前面这个Payload用到了Java里的强制类型转换，有时候我们利用漏洞的时候（在表达式上下文中）是没有这种语法的。所以，我们仍需利用反射用invoke方法来完成这一步</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clazz.getMethod(<span class="string">&quot;start&quot;</span>).invoke(clazz.getConstructor(List.class).newInstance(Arrays.asList(<span class="string">&quot;calc.exe&quot;</span>)));</span><br></pre></td></tr></table></figure>
+
+<p>通过<code>getMethod(&quot;start&quot;)</code> 获取到<code>start</code>方法，然后 <code>invoke</code> 执行， invoke 的第一个参数就是<code>ProcessBuilder Object</code>了  </p>
+<p>第二个构造函数<code>public ProcessBuilder(String... command)</code>参数是可变长参数</p>
+<p>对于可变长参数，Java其实在编译的时候会编译成一个数组，也就是说，如下这两种写法在底层是等价的</p>
+<p>因此我们只要传个数组就可以了</p>
+<p>将字符串数组的类 String[].class 传给 getConstructor ，获取 ProcessBuilder 的第二种构造函数  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Class.forName(<span class="string">&quot;java.lang.ProcessBuilder&quot;</span>);</span><br><span class="line">clazz.getConstructor(String[].class)</span><br></pre></td></tr></table></figure>
+
+<p><strong>在调用 newInstance 的时候，因为这个函数本身接收的是一个可变长参数，我们传给ProcessBuilder 的也是一个可变长参数，二者叠加为一个二维数组</strong>，所以整个Payload如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">((ProcessBuilder)clazz.getConstructor(String[].class).newInstance(<span class="keyword">new</span> String[][]&#123;&#123;<span class="string">&quot;calc.exe&quot;</span>&#125;&#125;)).start();</span><br></pre></td></tr></table></figure>
+
+<p>改成反射来写</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clazz.getMethod(<span class="string">&quot;start&quot;</span>).invoke(clazz.getConstructor(String[].class).newInstance(<span class="keyword">new</span> String[][]&#123;&#123;<span class="string">&quot;calc.exe&quot;</span>&#125;&#125;));</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="问题二"><a href="#问题二" class="headerlink" title="问题二"></a>问题二</h2><p>一个方法或构造方法是私有方法，涉及到 getDeclared 系列的反射了，与普通的 getMethod 、 getConstructor 区别是：</p>
+<ul>
+<li><code>getMethod</code>系列方法获取的是当前类中所有<strong>公共方法，包括从父类继承的方法</strong></li>
+<li><code>getDeclaredMethod</code>系列方法获取的是当前类中“声明”的方法，是实在写在这个类里的，包括私有的方法，但从父类里继承来的就不包含了   </li>
+</ul>
+<p><code>getDeclaredMethod</code>的具体用法和<code>getMethod</code>类似，<code>getDeclaredConstructor</code>的具体用法和<code>getConstructor</code>类似  </p>
+<h3 id="getDeclaredMethod遇到的问题"><a href="#getDeclaredMethod遇到的问题" class="headerlink" title="getDeclaredMethod遇到的问题"></a>getDeclaredMethod遇到的问题</h3><p>之前在反射2中的<code>Runtime</code>类的构造方法就是私有的，这里基于可以用<code>getDeclaredMethod</code>来解决</p>
+<p>这里有个问题用<code>getDeclaredMethods</code>方法并没有获取到私有的构造方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Method[] me = clazz.getDeclaredMethods();</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;me.length;i++)&#123;</span><br><span class="line">    System.out.println(me[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里java基础太弱了，没有找到原因，哪个大表哥知道可以联系我呀</p>
+<p><code>Runtime</code>这个类的构造函数是私有的，我们需要用 <code>Runtime.getRuntime()</code>来获取对象。其实现在我们也可以直接用 <code>getDeclaredConstructor</code>来获取这个私有的构造方法来实例化对象，进而执行命令:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Class clazz = Class.forName(<span class="string">&quot;java.lang.Runtime&quot;</span>);</span><br><span class="line">Constructor m = clazz.getDeclaredConstructor();</span><br><span class="line">m.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">clazz.getMethod(<span class="string">&quot;exec&quot;</span>, String.class).invoke(m.newInstance(), <span class="string">&quot;calc.exe&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了一个方法<code>setAccessible</code>，这个是必须的。我们在获取到一个私有方法后，必须用<code>setAccessible</code>修改它的作用域，否则仍然不能调用  </p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+                <div class="nextSlogan">Next Post</div>
+                <a href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" title= "记录">
+                    <div class="nextTitle">记录</div>
+                </a>
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2021/05/20/SESSION-UPLOAD-PROGRESS%E7%9A%84%E5%88%A9%E7%94%A8/" title= "SESSION_UPLOAD_PROGRESS的利用">
+                    <div class="prevTitle">SESSION_UPLOAD_PROGRESS的利用</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:dsil3nce@foxmail.com.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                  
+                  <img class="profile-qr" src="/intro/qq.jpg" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#01-%E5%8F%8D%E5%B0%84%E7%AF%87"><span class="toc-number">1.</span> <span class="toc-text">01 反射篇</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#forName-%E2%80%9C%E2%80%9D"><span class="toc-number">1.1.</span> <span class="toc-text">forName(“”)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#02-%E5%8F%8D%E5%B0%84%E7%AF%87-2"><span class="toc-number">2.</span> <span class="toc-text">02.反射篇(2)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#java%E9%93%BE%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="toc-number">2.1.</span> <span class="toc-text">java链式编程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E9%93%BE%E5%BC%8F%E7%BC%96%E7%A8%8B"><span class="toc-number">2.1.1.</span> <span class="toc-text">简单链式编程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%8D%E5%B0%84"><span class="toc-number">2.2.</span> <span class="toc-text">反射</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getMethod"><span class="toc-number">2.2.1.</span> <span class="toc-text">getMethod</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#invoke"><span class="toc-number">2.2.2.</span> <span class="toc-text">invoke</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#03-%E5%8F%8D%E5%B0%84%E7%AF%87-3"><span class="toc-number">3.</span> <span class="toc-text">03.反射篇(3)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%B8%80"><span class="toc-number">3.1.</span> <span class="toc-text">问题一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E4%BA%8C"><span class="toc-number">3.2.</span> <span class="toc-text">问题二</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#getDeclaredMethod%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-number">3.2.1.</span> <span class="toc-text">getDeclaredMethod遇到的问题</span></a></li></ol></li></ol></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 12
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2099 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" >记录</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2022/02/26/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-%E5%8F%8D%E5%B0%84%E7%AF%87/" >java反序列化-反射篇</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2021/05/20/SESSION-UPLOAD-PROGRESS%E7%9A%84%E5%88%A9%E7%94%A8/" >SESSION_UPLOAD_PROGRESS的利用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2021/04/16/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell/" >无字母数字webshell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/25</span><a class="archive-post-title" href= "/2021/01/25/ctfshow-djb/" >ctfshow-djb</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/%E7%BA%B5%E6%A8%AA%E6%9D%AF/" >纵横杯</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/dasctf-bjd/" >dasctf&bjd</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2020/12/13/postgresql%E5%88%9D%E6%8E%A2/" >postgresql初探</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href= "/2020/12/01/ctfshow%E7%BA%A2%E5%8C%85%E9%A2%98/" >ctfshow红包题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/2020/11/17/%E7%AC%AC%E5%85%AD%E5%B1%8A%E4%B8%8A%E6%B5%B7%E5%B8%82%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9Bweb%E4%B8%A4%E9%A2%98-%E5%A4%8D%E7%8E%B0/" >第六届上海市大学生网络安全大赛web两题(复现)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/05</span><a class="archive-post-title" href= "/2020/09/05/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >frp内网穿透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/03</span><a class="archive-post-title" href= "/2020/03/03/phpstorm-xdebug/" >phpstorm+xdebug断点调试环境(转载)</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="wp"><span class="iconfont-archer">&#xe606;</span>wp</span>
+    
+        <span class="sidebar-tag-name" data-tags="network"><span class="iconfont-archer">&#xe606;</span>network</span>
+    
+        <span class="sidebar-tag-name" data-tags="others"><span class="iconfont-archer">&#xe606;</span>others</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
+    
+        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
+    
+        <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "M0deration"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+
