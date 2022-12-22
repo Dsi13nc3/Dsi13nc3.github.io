@@ -355,19 +355,25 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2021/01/25/ctfshow-djb/" >
+        <a class="abstract-title" href = "/2022/12/22/2022%20pwnhub%20%E5%86%AC%E5%AD%A3%E8%B5%9B/" >
             
-                <span>ctfshow-djb</span>
+                <span>2022 pwnhub 冬季赛</span>
         </a>
         <div class="abstract-content">
-            webspaceman几乎原题
-源码
-12345678910111213141516171819202122232425262728293031323334353637&lt;?php error_reporting(0); highlight_file(__FILE__); class spaceman &#123;     public $username;     public $password;     public function __construct($username,$password)     &#123;         $this-&gt;username =...
+            2022 pwnhub 冬季赛Webreset
+reset290
+you know git, control it.
+
+这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解
+题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码
+关键的就是reset.php和upload.php
+upload.php
+1234567891011121314151617181920212223&lt;?phpif(isset($_FILES[&#x27;file&#x27;]))&#123;    $fileType = $_FILES[&#x27...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/01/25</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2022/12/22</span>
             </div>
             <!-- tags  -->
             
@@ -386,17 +392,19 @@
     
     
     <article class="index-post">
-        <a class="abstract-title" href = "/2020/12/26/%E7%BA%B5%E6%A8%AA%E6%9D%AF/" >
+        <a class="abstract-title" href = "/2021/01/25/ctfshow-djb/" >
             
-                <span>纵横杯</span>
+                <span>ctfshow-djb</span>
         </a>
         <div class="abstract-content">
-            这是一篇加密文章，输入密码查看。
+            webspaceman几乎原题
+源码
+12345678910111213141516171819202122232425262728293031323334353637&lt;?php error_reporting(0); highlight_file(__FILE__); class spaceman &#123;     public $username;     public $password;     public function __construct($username,$password)     &#123;         $this-&gt;username =...
         </div>
         <div class="abstract-post-meta">
             <!-- date  -->
             <div class="abstract-date">
-                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2020/12/26</span>
+                <span class="abstract-calander iconfont-archer">&#xe676;</span><span class="abstract-time">2021/01/25</span>
             </div>
             <!-- tags  -->
             
@@ -716,8 +724,6 @@ index.php
     
     
     
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 12
@@ -731,22 +737,18 @@ index.php
     
     
     
-    <div class="archive-year"> 2099 </div>
+    <div class="archive-year"> 2022 </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" >记录</a>
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2022/12/22/2022%20pwnhub%20%E5%86%AC%E5%AD%A3%E8%B5%9B/" >2022 pwnhub 冬季赛</a>
         </li>
     
     
-    
-    
-    
-        </ul>
-    
-    <div class="archive-year"> 2022 </div>
-    <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span><a class="archive-post-title" href= "/2022/10/09/cc1/" >cc1</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -785,11 +787,6 @@ index.php
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/%E7%BA%B5%E6%A8%AA%E6%9D%AF/" >纵横杯</a>
-        </li>
     
     
         <li class="archive-post-item">
@@ -867,9 +864,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
     
-        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
-    
         <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
+    
+        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>

