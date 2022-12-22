@@ -20,12 +20,12 @@
     <meta name="keywords" content="hexo,ctf,web安全">
     
     <meta name="description" content="">
-    <meta name="description" content="2022 pwnhub 冬季赛Webreset reset290 you know git, control it.  这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解 题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码 关键的就是reset.php和upload.php upload.php 1234567891011121314">
+    <meta name="description" content="Webreset reset290 you know git, control it.  这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解 题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码 关键的就是reset.php和upload.php upload.php 1234567891011121314151617181920212">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2022 pwnhub 冬季赛">
 <meta property="og:url" content="https://github.com/Dsi13nc3/2022/12/22/2022%20pwnhub%20%E5%86%AC%E5%AD%A3%E8%B5%9B/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="2022 pwnhub 冬季赛Webreset reset290 you know git, control it.  这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解 题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码 关键的就是reset.php和upload.php upload.php 1234567891011121314">
+<meta property="og:description" content="Webreset reset290 you know git, control it.  这题让我们好好学习了git，说来惭愧都已经是研一的学生对于git还是一知半解 题目提示了git所以首先使用了githack去探测一下，发现有.git泄露可以脱下来源码 关键的就是reset.php和upload.php upload.php 1234567891011121314151617181920212">
 <meta property="og:locale">
 <meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224104-520219.png">
 <meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224141-593643.png">
@@ -41,7 +41,7 @@
 <meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224228-45319.png">
 <meta property="og:image" content="http://dsil3nce-imgbed.oss-cn-shanghai.aliyuncs.com/typora/202212/22/224229-755688.png">
 <meta property="article:published_time" content="2022-12-22T13:31:53.000Z">
-<meta property="article:modified_time" content="2022-12-22T14:45:13.838Z">
+<meta property="article:modified_time" content="2022-12-22T15:01:37.845Z">
 <meta property="article:author" content="M0deration">
 <meta property="article:tag" content="wp">
 <meta name="twitter:card" content="summary">
@@ -423,7 +423,7 @@ height:50vh;
         <div class="container container-unloaded">
             <main class="main post-page">
     <article class="article-entry">
-        <h1 id="2022-pwnhub-冬季赛"><a href="#2022-pwnhub-冬季赛" class="headerlink" title="2022 pwnhub 冬季赛"></a>2022 pwnhub 冬季赛</h1><h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a>reset</h2><blockquote>
+        <h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="reset"><a href="#reset" class="headerlink" title="reset"></a>reset</h2><blockquote>
 <p><strong>reset<br>290</strong></p>
 <p>you know git, control it.</p>
 </blockquote>
@@ -439,7 +439,7 @@ height:50vh;
 <p>上面两个文件只截取了关键部分</p>
 <p>其实就是有一个文件上传点还有一个代码回滚的地方，但是对于回滚字段限制只能是40位的字母+数字，但是上传的文件名处只限制了匹配到大于10位由字母和数字组成文件名就可以（其他那些都可以绕）</p>
 <p>这题我们当时拿到的思路就是上传一个commit包含恶意文件然后让他回滚到我们的commit就可以出现我们的恶意文件了，但是对于.git文件夹下的内容不熟悉不知道该如何入手，先去浅浅学习一下</p>
-<p><a target="_blank" rel="noopener" href="https://www.notion.so/git-git-a7f9ceca9fbe460294157d805aaad5f0"><strong><strong>解析.git文件夹，深入了解git内部原理</strong></strong></a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.cti.app/archives/1344"><strong><strong>解析.git文件夹，深入了解git内部原理</strong></strong></a></p>
 <p>我们比赛中并没有及时去恶补git原理，就是去忙猜</p>
 <h3 id="失败尝试"><a href="#失败尝试" class="headerlink" title="失败尝试"></a>失败尝试</h3><p>刚开始认为只要commit那次hash前两位和文件夹对应上就可以了(读了前面的原理就知道(blob commit tree都会生成新的hash文件)，因为他内部objects中已有的文件夹有限，我们想着爆破commit前两位，后来本地实验只把commit传入回滚会显示找不到tree</p>
 <p>（看完上面原理发现这个操作很傻x，所以还是需要懂原理再去试）</p>
@@ -569,6 +569,7 @@ height:50vh;
 <p>然后</p>
 <p><code>calc=ｅｖａｌ(ｂｙｔｅｓ(ｌｉｓｔ((95,95,105,109,112,111,114,116,95,95,40,39,111,115,39,41,46,112,111,112,101,110,40,39,99,97,116,32,47,102,108,97,103,39,41,46,114,101,97,100,40,41))))</code></p>
 <p>即可以获取flag了</p>
+<p><strong>login后面再补</strong></p>
 <h1 id="GAME"><a href="#GAME" class="headerlink" title="GAME"></a>GAME</h1><p>D盾扫描漏洞文件<br>/server/game/BattleNetGateway.php</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> 	</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;interface.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;utils.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;BattleFunc.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;HeroFunc.php&quot;</span>);</span><br><span class="line">	<span class="keyword">require_once</span>(<span class="string">&quot;BattleNetServices.php&quot;</span>);</span><br><span class="line">	define(<span class="string">&quot;BATTLE_NET_KEY&quot;</span>,<span class="string">&quot;M7XDFCR9WRRGRQ9ETBQ6&quot;</span>);</span><br><span class="line">	<span class="keyword">if</span> (!defined(<span class="string">&#x27;PATH_SEPARATOR&#x27;</span>)) &#123;<span class="keyword">if</span> (substr(PHP_OS, <span class="number">0</span>, <span class="number">3</span>) == <span class="string">&#x27;WIN&#x27;</span>) define(<span class="string">&#x27;PATH_SEPARATOR&#x27;</span>, <span class="string">&#x27;;&#x27;</span>); <span class="keyword">else</span> define(<span class="string">&#x27;PATH_SEPARATOR&#x27;</span>, <span class="string">&#x27;:&#x27;</span>);&#125;	</span><br><span class="line">	ini_set(<span class="string">&#x27;include_path&#x27;</span>,ini_get(<span class="string">&#x27;include_path&#x27;</span>).PATH_SEPARATOR.realpath(<span class="string">&quot;../&quot;</span>)); 	</span><br><span class="line">	</span><br><span class="line">	$param=$_POST;</span><br><span class="line">	<span class="keyword">if</span>(<span class="keyword">empty</span>($param))$param=$_GET;		</span><br><span class="line">	$from_uid=$param[<span class="string">&quot;from_uid&quot;</span>];	</span><br><span class="line">	$sign=$param[<span class="string">&quot;sign&quot;</span>];</span><br><span class="line">	$commandFunc=$param[<span class="string">&quot;commandFunc&quot;</span>];</span><br><span class="line">	$content=urldecode($param[<span class="string">&quot;content&quot;</span>]);</span><br><span class="line">	$content_encoding=$param[<span class="string">&quot;content-encoding&quot;</span>];</span><br><span class="line">	<span class="comment">//$tt=$from_uid.$commandFunc.$content.BATTLE_NET_KEY;</span></span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line">	</span><br><span class="line">	$ret=<span class="keyword">array</span>();</span><br><span class="line">	<span class="keyword">if</span>($sign!=md5($from_uid.$commandFunc.$content.BATTLE_NET_KEY)) </span><br><span class="line">		$ret[]=<span class="number">0</span>;</span><br><span class="line">	<span class="keyword">else</span>&#123;</span><br><span class="line">		$ret[]=<span class="number">1</span>;</span><br><span class="line">	</span><br><span class="line">		<span class="keyword">try</span>&#123;</span><br><span class="line">			<span class="keyword">if</span>($content_encoding==<span class="string">&quot;csv&quot;</span>)&#123;</span><br><span class="line">				$inputParams=explode(<span class="string">&quot;|&quot;</span>,$content);</span><br><span class="line">				<span class="keyword">if</span>(count($inputParams)==<span class="number">1</span>)&#123;</span><br><span class="line">					$inputParams=$inputParams[<span class="number">0</span>];</span><br><span class="line">				&#125;</span><br><span class="line">				$ret[]=$commandFunc($from_uid,$inputParams);</span><br><span class="line">			&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">				$inputParams=json_decode($content,<span class="literal">true</span>);</span><br><span class="line">				<span class="keyword">if</span>(is_array($inputParams)&amp;&amp;count($inputParams)==<span class="number">1</span>)&#123;</span><br><span class="line">				     $inputParams=array_shift($inputParams);</span><br><span class="line">				&#125;</span><br><span class="line">				$ret[]=$commandFunc($from_uid,$inputParams); </span><br><span class="line">			&#125;</span><br><span class="line">		&#125;<span class="keyword">catch</span>(<span class="built_in">Exception</span> $e)&#123;</span><br><span class="line">			$ret = <span class="keyword">array</span>(<span class="number">0</span>=&gt;<span class="number">0</span>);</span><br><span class="line">			$ret[] = $e-&gt;getMessage();</span><br><span class="line">	    &#125;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="keyword">if</span>($content_encoding==<span class="string">&quot;csv&quot;</span>)&#123;</span><br><span class="line">    	<span class="keyword">print</span> implode(<span class="string">&quot;|&quot;</span>,$ret);</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    	<span class="keyword">print</span> json_encode($ret);</span><br><span class="line">    &#125;</span><br><span class="line">	 </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -703,7 +704,7 @@ top:50vh;
         <div class="toc-catalog">
             <span class="iconfont-archer catalog-icon">&#xe613;</span><span>CATALOG</span>
         </div>
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#2022-pwnhub-%E5%86%AC%E5%AD%A3%E8%B5%9B"><span class="toc-number">1.</span> <span class="toc-text">2022 pwnhub 冬季赛</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number">2.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#reset"><span class="toc-number">2.1.</span> <span class="toc-text">reset</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B1%E8%B4%A5%E5%B0%9D%E8%AF%95"><span class="toc-number">2.1.1.</span> <span class="toc-text">失败尝试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%B0%9D%E8%AF%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">成功尝试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssrfme"><span class="toc-number">2.2.</span> <span class="toc-text">ssrfme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SPL"><span class="toc-number">2.3.</span> <span class="toc-text">SPL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#calc"><span class="toc-number">2.4.</span> <span class="toc-text">calc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GAME"><span class="toc-number">3.</span> <span class="toc-text">GAME</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Web"><span class="toc-number">1.</span> <span class="toc-text">Web</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#reset"><span class="toc-number">1.1.</span> <span class="toc-text">reset</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%B1%E8%B4%A5%E5%B0%9D%E8%AF%95"><span class="toc-number">1.1.1.</span> <span class="toc-text">失败尝试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%88%90%E5%8A%9F%E5%B0%9D%E8%AF%95"><span class="toc-number">1.1.2.</span> <span class="toc-text">成功尝试</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ssrfme"><span class="toc-number">1.2.</span> <span class="toc-text">ssrfme</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SPL"><span class="toc-number">1.3.</span> <span class="toc-text">SPL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#calc"><span class="toc-number">1.4.</span> <span class="toc-text">calc</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GAME"><span class="toc-number">2.</span> <span class="toc-text">GAME</span></a></li></ol>
     </div>
     
     <div class="back-top iconfont-archer">&#xe639;</div>
@@ -716,10 +717,6 @@ top:50vh;
     <div class="sidebar-content sidebar-content-show-archive">
           <div class="sidebar-panel-archives">
     <!-- 在ejs中将archive按照时间排序 -->
-    
-    
-    
-    
     
     
     
@@ -943,9 +940,9 @@ top:50vh;
     
         <span class="sidebar-tag-name" data-tags="wp"><span class="iconfont-archer">&#xe606;</span>wp</span>
     
-        <span class="sidebar-tag-name" data-tags="others"><span class="iconfont-archer">&#xe606;</span>others</span>
-    
         <span class="sidebar-tag-name" data-tags="network"><span class="iconfont-archer">&#xe606;</span>network</span>
+    
+        <span class="sidebar-tag-name" data-tags="others"><span class="iconfont-archer">&#xe606;</span>others</span>
     
     </div>
     <div class="iconfont-archer sidebar-tags-empty">&#xe678;</div>
@@ -982,9 +979,9 @@ jsonContent:
     
         <span class="sidebar-category-name" data-categories="Web"><span class="iconfont-archer">&#xe60a;</span>Web</span>
     
-        <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
-    
         <span class="sidebar-category-name" data-categories="javasec"><span class="iconfont-archer">&#xe60a;</span>javasec</span>
+    
+        <span class="sidebar-category-name" data-categories="others"><span class="iconfont-archer">&#xe60a;</span>others</span>
     
     </div>
     <div class="iconfont-archer sidebar-categories-empty">&#xe678;</div>
